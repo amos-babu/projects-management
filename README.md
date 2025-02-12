@@ -54,12 +54,12 @@ Follow these steps to run the project locally:
 
 4. Start the development server:
    ```bash
-  composer run dev
+   composer run dev
    ```
-
-5. Open your browser and navigate to:
-   ```
-   http://localhost:8000/
+   
+6. Open your browser and navigate to:
+   ```bash
+    http://localhost:8000/
    ```
 
 ## Security and Permissions
