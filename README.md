@@ -1,106 +1,72 @@
-# Personal Portfolio
+# Project Management System
 
-Welcome to my personal portfolio! This project showcases my skills, experience, and the projects I have worked on as a developer. The portfolio is built using **React**, designed to be fully responsive, and offers an engaging user experience.
+The Project Management System is a web-based application designed to help teams plan, track, and collaborate on projects efficiently
 
 ---
 
 ## Features
-
-- **Introduction:** A brief introduction about who I am and what I do.
-- **Projects Showcase:** A detailed display of projects I have worked on, with links to their GitHub repositories.
-- **Contact Form:** Allows visitors to reach out to me directly.
-- **Responsive Design:** Looks great on all devices, from desktops to smartphones.
-- **Technologies Used Section:** Highlights my tech stack and expertise.
+-  User authentication and authorization (Admin, Manager, Team Member)
+- ✅ Create, update, and delete projects
+- ✅ Task management with deadlines and priorities
+- ✅ Team collaboration with comments
+- ✅ Real-time notifications and updates
+- ✅ Role-based access control
+- ✅ Project status tracking and reports
 
 ---
 
 ## Technologies Used
 
-- **React**: Frontend framework for building a dynamic UI.
-- **Tailwind CSS**: For styling the application with modern, utility-first classes.
-- **React Router**: For navigation between pages.
--  **Typescript**: For handling the type setting nature of javascript.
-- **EmailJS**: For handling the contact form submissions.
+- Frontend: React, TypeScript, Tailwind CSS
+- In between Frontend and backend: Inertia
+- Backend: Laravel, PHP
+- Database: SQLite
+- Real-time Communication: Laravel Echo, Laravel Reverb
+- Authentication: JWT
+
 
 ---
 
 ## Installation
 
+## Prerequisites
+
+- Node.js & npm
+- PHP & Composer
+- Sqlite database
+
 Follow these steps to run the project locally:
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/amos-babu/personal-portfolio.git
+   git clone https://github.com/amos-babu/projects-management.git
    ```
 
 2. Navigate to the project folder:
    ```bash
-   cd personal-portfolio
+   cd projects-management
    ```
 
 3. Install dependencies:
    ```bash
-   npm install
+   npm install && npm run build
    ```
 
 4. Start the development server:
    ```bash
-   npm run dev
+  composer run dev
    ```
 
 5. Open your browser and navigate to:
    ```
-   http://localhost:5173/
+   http://localhost:8000/
    ```
 
----
+## Security and Permissions
 
-## Folder Structure
+Role-based access control ensures only authorized users can access sensitive data.
 
-```
-portfolio/
-├── public/
-│   ├── favicon.ico       # Favicon
-│   ├── index.html        # HTML template
-│   └── assets/           # Static assets like images
-├── src/
-│   ├── components/       # Reusable components (e.g., Navbar, Footer, ProjectCard)
-│   ├── pages/            # Main pages (e.g., Home, Projects, About, Contact)
-│   ├── App.js            # Main React component
-│   ├── index.js          # Entry point
-│   └── styles/           # Custom styles if any
-├── .gitignore
-├── package.json
-└── README.md
-```
-
----
-
-## Deployment
-
-This portfolio can be deployed to platforms like **Netlify**, **Vercel**, or **GitHub Pages**. For example:
-
-### Deploying to GitHub Pages:
-1. Install the `gh-pages` package:
-   ```bash
-   npm install gh-pages --save-dev
-   ```
-
-2. Add the following scripts to `package.json`:
-   ```json
-   "homepage": "https://yourusername.github.io/your-portfolio",
-   "scripts": {
-       "predeploy": "npm run build",
-       "deploy": "gh-pages -d build"
-   }
-   ```
-
-3. Deploy the app:
-   ```bash
-   npm run deploy
-   ```
-
----
+Authentication with JWT/OAuth for secure login.
 
 ## License
 
