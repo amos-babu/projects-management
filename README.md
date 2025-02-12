@@ -84,5 +84,5 @@ Feel free to reach out to me:
 
 ---
 
-Thank you for visiting my portfolio!
+Thank you for visiting my project repo!
 
