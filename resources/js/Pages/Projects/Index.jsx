@@ -1,17 +1,19 @@
 import PrimaryButton from '@/Components/PrimaryButton';
+import { Alert, AlertDescription, AlertTitle } from '@/Components/ui/alert';
+import { Badge } from '@/Components/ui/badge';
+import { Button } from '@/Components/ui/button';
 import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from '@/Components/ui/pagination';
-import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/Components/ui/table';
-// import { Inertia } from '@inertiajs/inertia';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/Components/ui/table';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head, Link, usePage } from '@inertiajs/react';
+import { Head, Link, router, usePage } from '@inertiajs/react';
+import { Terminal } from 'lucide-react';
 
-export default function Index({ projects }) {
-const { flash } = usePage().props;
-console.log(projects);
+export default function Index({ projects, children }) {
+    const { flash } = usePage().props;
 
 const handleDeleteProject = (id) => {
     if(confirm('Are you sure you want to delete this projects?')){
-        Inertia.delete(route('projects.destroy', id));
+        router.delete(route('projects.destroy', id));
     }
 }
     return (
@@ -24,6 +26,17 @@ const handleDeleteProject = (id) => {
         >
             <Head title="Projects" />
             <div className="py-12">
+
+                {flash?.success && (
+                    <Alert className="mb-4 bg-green-400">
+                        <Terminal className='w-4 h-4'/>
+                        <AlertTitle>Success</AlertTitle>
+                        <AlertDescription>
+                            {flash.success}
+                        </AlertDescription>
+                    </Alert>
+                )}
+                {children}
 
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
                     <PrimaryButton className='mb-4'>
@@ -48,10 +61,20 @@ const handleDeleteProject = (id) => {
                                             <TableRow key={project.id}>
                                                 <TableCell>{project.id}</TableCell>
                                                 <TableCell>{project.name}</TableCell>
-                                                <TableCell>{project.status}</TableCell>
+                                                <TableCell>
+                                                    <Badge
+                                                        className={`${project.status === 'pending' ? 'bg-red-600' : project.status === 'In Progress' ? 'bg-yellow-500' : project.status === 'Completed' ? 'bg-green-600' : '' }`}
+                                                        >
+                                                            {project.status}
+
+                                                        </Badge>
+                                                </TableCell>
                                                 <TableCell>{project.start_date}</TableCell>
                                                 <TableCell>{project.end_date}</TableCell>
-                                                <TableCell>Complete</TableCell>
+                                                <TableCell>
+                                                    <Link className='mx-2' href={route('projects.edit', project.id)}>Edit</Link>
+                                                    <Button className="bg-red-600" onClick={() => handleDeleteProject(project.id)}>Delete</Button>
+                                                </TableCell>
                                             </TableRow>
                                          ))}
                                     </TableBody>
