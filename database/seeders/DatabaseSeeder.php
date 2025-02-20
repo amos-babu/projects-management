@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\UserRoles;
 use App\Models\Project;
 use App\Models\Task;
 use App\Models\User;
@@ -28,14 +29,14 @@ class DatabaseSeeder extends Seeder
         User::factory()->create([
             'name' => 'Test Admin',
             'email' => 'admin@example.com',
-            'role' => 'Admin',
+            'role' => UserRoles::ADMIN->value,
             'password' => bcrypt('password'),
         ]);
 
         User::factory()->create([
             'name' => 'Test Manager',
             'email' => 'manager@example.com',
-            'role' => 'Manager',
+            'role' => UserRoles::MANAGER->value,
             'password' => bcrypt('password'),
         ]);
     }
