@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\ProjectsStatus;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -20,7 +21,7 @@ class ProjectFactory extends Factory
             'name' => fake()->sentence(),
             'description' => fake()->sentence(),
             'user_id' => fake()->numberBetween(1, 30),
-            'status' => fake()->randomElement(['pending', 'In Progress', 'Completed']),
+            'status' => fake()->randomElement(array_column(ProjectsStatus::cases(), 'value')),
             'start_date' => fake()->date(),
             'end_date' => fake()->date(),
         ];

@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\ProjectsStatus;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -16,7 +17,7 @@ return new class extends Migration
             $table->string('name');
             $table->text('description')->nullable();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->enum('status', ['pending', 'In Progress', 'Completed'])->default('pending');
+            $table->enum('status', array_column(ProjectsStatus::cases(), 'value'))->default(ProjectsStatus::PENDING->value);
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
             $table->timestamps();
