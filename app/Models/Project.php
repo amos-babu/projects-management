@@ -10,6 +10,16 @@ class Project extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'name',
+        'description',
+        'user_id',
+        'status',
+        'start_date',
+        'end_date',
+        'manager_assigned'
+    ];
+
     public $casts = [
         'status' => ProjectsStatus::class
     ];

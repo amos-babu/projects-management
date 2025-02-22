@@ -3,17 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Enums\ProjectsStatus;
+use App\Enums\UserRoles;
 use App\Models\Project;
 use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
 use App\Http\Resources\ProjectResource;
+use App\Http\Resources\UserResource;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class ProjectController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         $projects = Project::query()->latest()->paginate();
@@ -23,25 +24,30 @@ class ProjectController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        return Inertia::render('Projects/Create');
+        $managers = User::query()->where('role', UserRoles::MANAGER->value)->get();
+        $statusOptions = collect(ProjectsStatus::cases())->map(fn($status)=> [
+            'name' => $status->name,
+            'value' => $status->value
+        ]);
+
+        return Inertia::render('Projects/Create', [
+            'statusOptions' => $statusOptions,
+            'managers' => UserResource::collection($managers),
+        ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(StoreProjectRequest $request)
     {
-        //
+        $data = $request->validated();
+        $data['user_id'] = Auth::id();
+
+        Project::create($data);
+
+        return to_route('projects.index')->with('success', 'Project Successfully Created!');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Project $project)
     {
         return Inertia::render('Projects/Show', [
@@ -49,28 +55,28 @@ class ProjectController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Project $project)
     {
+        $managers = User::query()->where('role', UserRoles::MANAGER->value)->get();
+        $statusOptions = collect(ProjectsStatus::cases())->map(fn($status)=> [
+            'name' => $status->name,
+            'value' => $status->value
+        ]);
 
         return Inertia::render('Projects/Edit', [
+            'statusOptions' => $statusOptions,
+            'managers' => UserResource::collection($managers),
             'project' => new ProjectResource($project),
         ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(UpdateProjectRequest $request, Project $project)
     {
-        //
+        $data = $request->validated();
+        $project->update($data);
+        return to_route('projects.index')->with('success', 'Project Successfully Updated!');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Project $project)
     {
         $project->delete();

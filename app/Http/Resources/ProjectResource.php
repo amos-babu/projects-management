@@ -23,6 +23,7 @@ class ProjectResource extends JsonResource
             "status" => $this->status->label(),
             "start_date" => $this->start_date,
             "end_date" => $this->end_date,
+            "manager_assigned" => $this->manager_assigned
         ];
     }
 }

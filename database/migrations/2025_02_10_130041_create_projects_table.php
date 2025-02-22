@@ -19,6 +19,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->enum('status', array_column(ProjectsStatus::cases(), 'value'))->default(ProjectsStatus::PENDING->value);
             $table->date('start_date')->nullable();
+            $table->string('manager_assigned')->nullable();
             $table->date('end_date')->nullable();
             $table->timestamps();
         });

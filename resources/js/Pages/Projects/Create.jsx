@@ -1,15 +1,27 @@
+import { Alert, AlertDescription, AlertTitle } from '@/Components/ui/alert';
 import { Button } from '@/Components/ui/button';
 import { Input } from '@/Components/ui/input';
-import { Popover, PopoverTrigger } from '@/Components/ui/popover';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/Components/ui/select';
 import { Textarea } from '@/Components/ui/textarea';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Label } from "@/components/ui/label"
-import { Head } from '@inertiajs/react';
-import { PopoverContent } from '@radix-ui/react-popover';
-import { CalendarIcon } from 'lucide-react';
+import { Head, useForm } from '@inertiajs/react';
+import { AlertCircle } from 'lucide-react';
 
-export default function Create() {
+export default function Create({ managers,statusOptions }) {
+    const { data, setData, post, errors, processing, recentlySuccessful } = useForm({
+        name: '',
+        description: '',
+        status: '',
+        start_date: '',
+        end_date: '',
+        manager_assigned: ''
+    });
+
+    const submitProject = (e) => {
+        e.preventDefault();
+        post(route('projects.store'));
+    }
     return (
         <AuthenticatedLayout
             header={
@@ -21,57 +33,98 @@ export default function Create() {
             <Head title="Create" />
 
             <div className="py-12">
+                {Object.keys(errors).length > 0 && (
+                    <Alert variant="destructive" className="mb-4">
+                        <AlertCircle className="w-4 h-4" />
+                        <AlertTitle>Error</AlertTitle>
+                        <AlertDescription>
+                            {Object.values(errors).flat().map((err, index) => (
+                                <div key={index}>{err}</div>
+                            ))}
+                        </AlertDescription>
+                    </Alert>
+                )}
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
                     <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg">
                         <div className="p-6 text-gray-900">
-                            <form>
+                            <form onSubmit={submitProject}>
                                 <div className='mb-5'>
                                     <Label>Project Name</Label>
-                                    <Input/>
+                                    <Input
+                                        value={ data.name }
+                                        onChange = {(e) => setData({ ...data, name: e.target.value })}
+                                    />
                                 </div>
 
                                 <div className='mb-5'>
                                     <Label>Project Description (Optional)</Label>
-                                    <Textarea/>
+                                    <Textarea
+                                        value={ data.description }
+                                        onChange={(e) => setData({...data, description: e.target.value })}
+                                        />
                                 </div>
                                 <div className='mb-5'>
                                     <Label>Project Status</Label>
-                                    <Select>
+                                    <Select
+                                        value={data.status}
+                                        onValueChange={(value) => setData({ ...data, status: value })}>
                                     <SelectTrigger className="w-[180px]">
-                                            <SelectValue placeholder="Pending" />
+                                            <SelectValue placeholder="PENDING" />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            <SelectItem value="light">Pending</SelectItem>
-                                            <SelectItem value="dark">In Progress</SelectItem>
-                                            <SelectItem value="system">Completed</SelectItem>
+                                            {statusOptions.map((statusOption, index) => (
+                                                 <SelectItem key={index} value={statusOption.value}>{statusOption.name}</SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                                <div className="flex flex-wrap gap-3 mb-5">
+                                    <div>
+                                        <Label>Start Date</Label>
+                                        <input
+                                            value={ data.start_date }
+                                            onChange={(e) => setData({...data, start_date: e.target.value})}
+                                            className='mx-3 border-gray-300 outline-none focus:border-gray-950 rounded-xl'
+                                            type='date'
+                                            id='start_date'
+                                            name='start_date'/>
+                                    </div>
+                                    <div>
+                                        <Label>End Date</Label>
+                                        <input
+                                            value={ data.end_date }
+                                            onChange={(e) => setData({...data, end_date: e.target.value})}
+                                            className='mx-3 border-gray-300 outline-none focus:border-gray-950 rounded-xl'
+                                            type='date'
+                                            id='start_date'
+                                            name='start_date'/>
+                                    </div>
+
+                                </div>
+
+                                <div className='mb-5'>
+                                    <Label>Assigned Project Manager</Label>
+                                    <Select
+                                        value={data.manager_assigned}
+                                        onValueChange={(value) => setData({ ...data, manager_assigned: value })}>
+                                    <SelectTrigger className="w-[180px]">
+                                            <SelectValue placeholder="Amos Babu" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            {managers?.data?.map((manager) => (
+                                                <SelectItem
+                                                    key={manager.id}
+                                                    value={manager.name}>
+                                                        {manager.name}
+                                                 </SelectItem>
+                                            ))}
                                         </SelectContent>
                                     </Select>
 
                                 </div>
-                                {/* <div className='mb-5'>
-                                    <Popover>
-                                        <PopoverTrigger asChild>
-                                            <Button
-                                            variant={"outline"}
-                                            className= {cn(
-                                                "w-[280px] justify-start text-left font-normal",
-                                                !date && "text-muted-foreground"
-                                            )}
-                                            >
-                                            <CalendarIcon className="w-4 h-4 mr-2" />
-                                            {date ? format(date, "PPP") : <span>Pick a date</span>}
-                                            </Button>
-                                        </PopoverTrigger>
-                                        <PopoverContent className="w-auto p-0">
-                                            <Calendar
-                                            mode="single"
-                                            selected={date}
-                                            onSelect={setDate}
-                                            initialFocus
-                                            />
-                                        </PopoverContent>
-                                    </Popover>
-                                </div> */}
+
+                                <Button type="submit" disabled = {processing}>Submit</Button>
+
                             </form>
                         </div>
                     </div>
