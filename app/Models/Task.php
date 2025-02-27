@@ -16,11 +16,11 @@ class Task extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'assigned_to');
     }
 
     public function project()
     {
-        return $this->belongsTo(Project::class, 'assigned_to');
+        return $this->belongsTo(Project::class);
     }
 }

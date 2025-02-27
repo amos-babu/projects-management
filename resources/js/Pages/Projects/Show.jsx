@@ -1,6 +1,8 @@
+import PrimaryButton from "@/Components/PrimaryButton";
 import { Badge } from "@/Components/ui/badge";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Head } from "@inertiajs/react";
+import { Head, Link } from "@inertiajs/react";
+import Index from "../Tasks/Index";
 
 export default function Show({ project }) {
     return (
@@ -17,7 +19,7 @@ export default function Show({ project }) {
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
                     <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg">
                         <div className="p-6 text-gray-900">
-                            <div className="flex flex-wrap mb-4 gap-7">
+                            <div className="flex flex-wrap justify-between mb-4 gap-7">
                                 <div className="mb-4 text-xl font-bold">
                                     {project.data.name}
                                 </div>
@@ -39,6 +41,13 @@ export default function Show({ project }) {
                                         {project.data.status}
                                     </Badge>
                                 </div>
+                                <div>
+                                    <PrimaryButton className="mb-4">
+                                        <Link href={route("tasks.create")}>
+                                            Create Task
+                                        </Link>
+                                    </PrimaryButton>
+                                </div>
                             </div>
 
                             <div className="mb-5 font-medium">
@@ -46,9 +55,13 @@ export default function Show({ project }) {
                             </div>
 
                             <div className="font-medium ">
-                                <span>Project Assigned By:</span>
+                                <span className="mr-4">
+                                    Project Assigned By:
+                                </span>
                                 {project.data.description}
                             </div>
+
+                            <Index tasks={project.data.tasks} />
                         </div>
                     </div>
                 </div>

@@ -1,7 +1,7 @@
+import { AlertDialogDemo } from "@/Components/AlertDialogDemo";
 import PrimaryButton from "@/Components/PrimaryButton";
 import { Alert, AlertDescription, AlertTitle } from "@/Components/ui/alert";
 import { Badge } from "@/Components/ui/badge";
-import { Button } from "@/Components/ui/button";
 import {
     Pagination,
     PaginationContent,
@@ -20,13 +20,12 @@ import {
     TableRow,
 } from "@/Components/ui/table";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Head, Link, useForm, usePage } from "@inertiajs/react";
+import { Head, Link, usePage } from "@inertiajs/react";
 import { Terminal } from "lucide-react";
 import { useEffect, useState } from "react";
 
 export default function Index({ projects, children }) {
     const { flash } = usePage().props;
-    const { delete: destroy } = useForm({});
     const [successMessage, setSuccessMessage] = useState(flash.success);
 
     setTimeout(() => {
@@ -38,12 +37,6 @@ export default function Index({ projects, children }) {
     useEffect(() => {
         setSuccessMessage(flash.success);
     }, [flash.success]);
-
-    const handleDeleteProject = (id) => {
-        if (confirm("Are you sure you want to delete this projects?")) {
-            destroy(route("projects.destroy", id));
-        }
-    };
     return (
         <AuthenticatedLayout
             header={
@@ -134,16 +127,9 @@ export default function Index({ projects, children }) {
                                                     >
                                                         Edit
                                                     </Link>
-                                                    <Button
-                                                        className="bg-red-600"
-                                                        onClick={() =>
-                                                            handleDeleteProject(
-                                                                project.id
-                                                            )
-                                                        }
-                                                    >
-                                                        Delete
-                                                    </Button>
+                                                    <AlertDialogDemo
+                                                        project={project}
+                                                    />
                                                 </TableCell>
                                             </TableRow>
                                         ))}

@@ -18,7 +18,7 @@ class DatabaseSeeder extends Seeder
     {
         User::factory(30)->create();
         Project::factory(30)->create();
-        Task::factory(30)->create();
+        Task::factory(60)->create();
 
         User::factory()->create([
             'name' => 'Test User',
