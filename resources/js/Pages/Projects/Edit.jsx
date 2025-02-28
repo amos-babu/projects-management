@@ -175,7 +175,7 @@ export default function Edit({ managers, statusOptions, project }) {
                                 </div>
 
                                 <Button type="submit" disabled={processing}>
-                                    Edit
+                                    Save
                                 </Button>
                             </form>
                         </div>

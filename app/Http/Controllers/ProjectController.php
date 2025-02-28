@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\ProjectsStatus;
+use App\Enums\TaskStatus;
 use App\Enums\UserRoles;
 use App\Models\Project;
 use App\Http\Requests\StoreProjectRequest;
@@ -59,7 +60,7 @@ class ProjectController extends Controller
 
     public function edit(Project $project)
     {
-        $managers = User::query()->where('role', UserRoles::MANAGER->value)->get();
+        $projectManagers = User::query()->where('role', UserRoles::MANAGER->value)->get();
         $statusOptions = collect(ProjectsStatus::cases())->map(fn($status)=> [
             'name' => $status->name,
             'value' => $status->value
@@ -67,7 +68,7 @@ class ProjectController extends Controller
 
         return Inertia::render('Projects/Edit', [
             'statusOptions' => $statusOptions,
-            'managers' => UserResource::collection($managers),
+            'managers' => UserResource::collection($projectManagers),
             'project' => new ProjectResource($project),
         ]);
     }
