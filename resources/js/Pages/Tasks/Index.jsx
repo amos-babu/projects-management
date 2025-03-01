@@ -62,7 +62,7 @@ export default function Index({ tasks }) {
                             >
                                 Edit
                             </Link>
-                            <AlertDialogDemo project={task} />
+                            <AlertDialogDemo item={task} itemType ='task' itemName = {task.title} routeName='tasks.destroy' />
                         </TableCell>
                     </TableRow>
                 ))}

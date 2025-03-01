@@ -1,6 +1,6 @@
 import { AlertDialogDemo } from "@/Components/AlertDialogDemo";
 import PrimaryButton from "@/Components/PrimaryButton";
-import { Alert, AlertDescription, AlertTitle } from "@/Components/ui/alert";
+import SuccessMessageDisplay from "@/Components/SuccessMessageDisplay";
 import { Badge } from "@/Components/ui/badge";
 import {
     Pagination,
@@ -20,23 +20,9 @@ import {
     TableRow,
 } from "@/Components/ui/table";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Head, Link, usePage } from "@inertiajs/react";
-import { Terminal } from "lucide-react";
-import { useEffect, useState } from "react";
+import { Head, Link } from "@inertiajs/react";
 
-export default function Index({ projects, children }) {
-    const { flash } = usePage().props;
-    const [successMessage, setSuccessMessage] = useState(flash.success);
-
-    setTimeout(() => {
-        if (successMessage) {
-            setSuccessMessage(null);
-        }
-    }, 3000);
-
-    useEffect(() => {
-        setSuccessMessage(flash.success);
-    }, [flash.success]);
+export default function Index({ projects }) {
     return (
         <AuthenticatedLayout
             header={
@@ -47,14 +33,7 @@ export default function Index({ projects, children }) {
         >
             <Head title="Projects" />
             <div className="py-12">
-                {successMessage && (
-                    <Alert className="mb-4 bg-green-400">
-                        <Terminal className="w-4 h-4" />
-                        <AlertTitle>Success</AlertTitle>
-                        <AlertDescription>{successMessage}</AlertDescription>
-                    </Alert>
-                )}
-                {children}
+                <SuccessMessageDisplay />
 
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
                     <PrimaryButton className="mb-4">
@@ -128,7 +107,10 @@ export default function Index({ projects, children }) {
                                                         Edit
                                                     </Link>
                                                     <AlertDialogDemo
-                                                        project={project}
+                                                        item={project}
+                                                        itemType="task"
+                                                        routeName="projects.destroy"
+                                                        itemName={project.name}
                                                     />
                                                 </TableCell>
                                             </TableRow>

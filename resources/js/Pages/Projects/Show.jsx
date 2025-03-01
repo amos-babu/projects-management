@@ -3,6 +3,7 @@ import { Badge } from "@/Components/ui/badge";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link } from "@inertiajs/react";
 import Index from "../Tasks/Index";
+import SuccessMessageDisplay from "@/Components/SuccessMessageDisplay";
 
 export default function Show({ project }) {
     return (
@@ -16,6 +17,7 @@ export default function Show({ project }) {
             <Head title="Dashboard" />
 
             <div className="py-12">
+                <SuccessMessageDisplay />
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
                     <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg">
                         <div className="p-6 text-gray-900">
@@ -42,11 +44,23 @@ export default function Show({ project }) {
                                     </Badge>
                                 </div>
                                 <div>
-                                    <PrimaryButton className="mb-4">
-                                        <Link href={route("tasks.create")}>
-                                            Create Task
-                                        </Link>
-                                    </PrimaryButton>
+                                    <div className="flex gap-3">
+                                        <PrimaryButton className="mb-4">
+                                            <Link href={route("tasks.create")}>
+                                                Create Task
+                                            </Link>
+                                        </PrimaryButton>
+                                        <PrimaryButton className="mb-4">
+                                            <Link
+                                                href={route(
+                                                    "projects.edit",
+                                                    project.data
+                                                )}
+                                            >
+                                                Update Project
+                                            </Link>
+                                        </PrimaryButton>
+                                    </div>
                                 </div>
                             </div>
 

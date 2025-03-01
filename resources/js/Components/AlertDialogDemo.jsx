@@ -12,11 +12,11 @@ import {
 import { Button } from "@/components/ui/button";
 import { useForm } from "@inertiajs/react";
 
-export function AlertDialogDemo({ project }) {
+export function AlertDialogDemo({ item, itemType, routeName, itemName }) {
     const { delete: destroy } = useForm({});
 
     const handleDeleteProject = (id) => {
-        destroy(route("projects.destroy", id));
+        destroy(route(routeName, id));
     };
     return (
         <AlertDialog>
@@ -30,14 +30,14 @@ export function AlertDialogDemo({ project }) {
                     </AlertDialogTitle>
                     <AlertDialogDescription>
                         This action cannot be undone. This will permanently
-                        delete project "{project.name}".
+                        delete {itemType} "{itemName}".
                     </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
                     <AlertDialogAction
                         className="bg-red-600"
-                        onClick={() => handleDeleteProject(project.id)}
+                        onClick={() => handleDeleteProject(item.id)}
                     >
                         Continue
                     </AlertDialogAction>

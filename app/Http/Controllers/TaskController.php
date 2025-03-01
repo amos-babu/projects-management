@@ -40,6 +40,9 @@ class TaskController extends Controller
 
     public function destroy(Task $task)
     {
-        //
+        $project = $task->project->id;
+        $task->delete();
+
+        return to_route('projects.show', $project)->with('success', 'Task Deleted Successfully!');
     }
 }
