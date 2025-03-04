@@ -20,8 +20,9 @@ class TaskFactory extends Factory
         return [
             'title' => fake()->sentence(),
             'description' => fake()->sentence(),
+            'user_id' => fake()->numberBetween(1, 30),
             'project_id' => fake()->numberBetween(1, 30),
-            'assigned_to' => fake()->numberBetween(1, 30),
+            'developer_assigned' => fake()->name(),
             'status' => fake()->randomElement(array_column(TaskStatus::cases(), 'value')),
             'start_date' => fake()->date(),
             'end_date' => fake()->date(),

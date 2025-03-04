@@ -23,30 +23,31 @@ export default function Show({ project }) {
                         <div className="p-6 text-gray-900">
                             <div className="flex flex-wrap justify-between mb-4 gap-7">
                                 <div className="mb-4 text-xl font-bold">
-                                    {project.data.name}
+                                    {project.name}
                                 </div>
                                 <div className="mb-4 text-xl font-bold">
                                     <Badge
                                         className={`${
-                                            project.data.status ===
-                                            "In Progress"
+                                            project.status === "In Progress"
                                                 ? "bg-yellow-500"
-                                                : project.data.status ===
-                                                  "Pending"
+                                                : project.status === "Pending"
                                                 ? "bg-red-500"
-                                                : project.data.status ===
-                                                  "Completed"
+                                                : project.status === "Completed"
                                                 ? "bg-green-500"
                                                 : ""
                                         }`}
                                     >
-                                        {project.data.status}
+                                        {project.status}
                                     </Badge>
                                 </div>
                                 <div>
                                     <div className="flex gap-3">
                                         <PrimaryButton className="mb-4">
-                                            <Link href={route("tasks.create")}>
+                                            <Link
+                                                href={route("tasks.create", {
+                                                    project_id: project.id,
+                                                })}
+                                            >
                                                 Create Task
                                             </Link>
                                         </PrimaryButton>
@@ -54,7 +55,7 @@ export default function Show({ project }) {
                                             <Link
                                                 href={route(
                                                     "projects.edit",
-                                                    project.data
+                                                    project
                                                 )}
                                             >
                                                 Update Project
@@ -65,17 +66,17 @@ export default function Show({ project }) {
                             </div>
 
                             <div className="mb-5 font-medium">
-                                {project.data.description}
+                                {project.description}
                             </div>
 
                             <div className="font-medium ">
                                 <span className="mr-4">
                                     Project Assigned By:
                                 </span>
-                                {project.data.description}
+                                {project.description}
                             </div>
 
-                            <Index tasks={project.data.tasks} />
+                            <Index tasks={project.tasks} />
                         </div>
                     </div>
                 </div>

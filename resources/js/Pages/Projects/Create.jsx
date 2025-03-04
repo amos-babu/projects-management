@@ -9,7 +9,7 @@ import { Head, useForm } from '@inertiajs/react';
 import { AlertCircle } from 'lucide-react';
 
 export default function Create({ managers,statusOptions }) {
-    const { data, setData, post, errors, processing, recentlySuccessful } = useForm({
+    const { data, setData, post, errors, processing } = useForm({
         name: '',
         description: '',
         status: '',

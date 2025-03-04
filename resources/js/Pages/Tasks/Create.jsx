@@ -14,29 +14,30 @@ import { Label } from "@/components/ui/label";
 import { Head, useForm } from "@inertiajs/react";
 import { AlertCircle } from "lucide-react";
 
-export default function Edit({ managers, statusOptions, project }) {
-    const { data, setData, put, errors, processing } = useForm({
-        name: project.name,
-        description: project.description,
-        status: project.status,
-        start_date: project.start_date,
-        end_date: project.end_date,
-        manager_assigned: project.manager_assigned,
+export default function Create({ developers, statusOptions, projectID }) {
+    const { data, setData, post, errors, processing } = useForm({
+        title: "",
+        description: "",
+        status: "",
+        start_date: "",
+        end_date: "",
+        developer_assigned: "",
+        project_id: projectID,
     });
 
-    const updateProject = (e) => {
+    const submitTask = (e) => {
         e.preventDefault();
-        put(route("projects.update", project));
+        post(route("tasks.store"));
     };
     return (
         <AuthenticatedLayout
             header={
                 <h2 className="text-xl font-semibold leading-tight text-gray-800">
-                    Edit Project
+                    Create Task
                 </h2>
             }
         >
-            <Head title="Edit" />
+            <Head title="Create Task" />
 
             <div className="py-12">
                 {Object.keys(errors).length > 0 && (
@@ -55,25 +56,24 @@ export default function Edit({ managers, statusOptions, project }) {
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
                     <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg">
                         <div className="p-6 text-gray-900">
-                            <form onSubmit={updateProject}>
+                            <form onSubmit={submitTask}>
                                 <div className="mb-5">
-                                    <Label>Project Name</Label>
+                                    <Label>Task Title</Label>
                                     <Input
-                                        value={data.name}
+                                        value={data.title}
                                         onChange={(e) =>
                                             setData({
                                                 ...data,
-                                                name: e.target.value,
+                                                title: e.target.value,
                                             })
                                         }
                                     />
                                 </div>
 
                                 <div className="mb-5">
-                                    <Label>
-                                        Project Description (Optional)
-                                    </Label>
+                                    <Label>Task Description (Optional)</Label>
                                     <Textarea
+                                        value={data.description}
                                         onChange={(e) =>
                                             setData({
                                                 ...data,
@@ -83,7 +83,7 @@ export default function Edit({ managers, statusOptions, project }) {
                                     />
                                 </div>
                                 <div className="mb-5">
-                                    <Label>Project Status</Label>
+                                    <Label>Task Status</Label>
                                     <Select
                                         value={data.status}
                                         onValueChange={(value) =>
@@ -91,10 +91,10 @@ export default function Edit({ managers, statusOptions, project }) {
                                         }
                                     >
                                         <SelectTrigger className="w-[180px]">
-                                            <SelectValue placeholder="PENDING" />
+                                            <SelectValue placeholder="TODO" />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            {statusOptions?.map(
+                                            {statusOptions.map(
                                                 (statusOption, index) => (
                                                     <SelectItem
                                                         key={index}
@@ -145,13 +145,13 @@ export default function Edit({ managers, statusOptions, project }) {
                                 </div>
 
                                 <div className="mb-5">
-                                    <Label>Assigned Project Manager</Label>
+                                    <Label>Assigned Developer</Label>
                                     <Select
-                                        value={data.manager_assigned}
+                                        value={data.developer_assigned}
                                         onValueChange={(value) =>
                                             setData({
                                                 ...data,
-                                                manager_assigned: value,
+                                                developer_assigned: value,
                                             })
                                         }
                                     >
@@ -159,20 +159,22 @@ export default function Edit({ managers, statusOptions, project }) {
                                             <SelectValue placeholder="Amos Babu" />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            {managers?.data?.map((manager) => (
-                                                <SelectItem
-                                                    key={manager.id}
-                                                    value={manager.name}
-                                                >
-                                                    {manager.name}
-                                                </SelectItem>
-                                            ))}
+                                            {developers?.data?.map(
+                                                (developer) => (
+                                                    <SelectItem
+                                                        key={developer.id}
+                                                        value={developer.name}
+                                                    >
+                                                        {developer.name}
+                                                    </SelectItem>
+                                                )
+                                            )}
                                         </SelectContent>
                                     </Select>
                                 </div>
 
                                 <Button type="submit" disabled={processing}>
-                                    Save
+                                    Submit
                                 </Button>
                             </form>
                         </div>

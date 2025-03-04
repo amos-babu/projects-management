@@ -17,9 +17,10 @@ return new class extends Migration
             $table->string('title');
             $table->text('description')->nullable();
             $table->foreignId('project_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('assigned_to')->constrained('users')->cascadeOnDelete('set null');
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->enum('status', array_column(TaskStatus::cases(), 'value'))-> default(TaskStatus::TODO->value);
             $table->date('start_date')->nullable();
+            $table->string('developer_assigned')->nullable();
             $table->date('end_date')->nullable();
             $table->timestamps();
         });

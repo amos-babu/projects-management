@@ -7,7 +7,7 @@ export default function Welcome({ auth }) {
             <Head title="Welcome" />
             <div className="flex items-center justify-center h-screen gap-3 bg-gray-50 text-black/50 dark:bg-black dark:text-white/50">
                 <div>
-                    <div className="mb-5">
+                    <div className="mb-5 justify-self-center">
                         <img
                             src={`${
                                 import.meta.env.BASE_URL
@@ -22,11 +22,16 @@ export default function Welcome({ auth }) {
                                 <Link href={route("dashboard")}>Dashboard</Link>
                             </Button>
                         ) : (
-                            <Button>
-                                <Link href={route("register")}>
-                                    Get Started
-                                </Link>
-                            </Button>
+                            <div className="flex gap-4">
+                                <Button>
+                                    <Link href={route("login")}>Sign In</Link>
+                                </Button>
+                                <Button>
+                                    <Link href={route("register")}>
+                                        Get Started
+                                    </Link>
+                                </Button>
+                            </div>
                         )}
                     </div>
                 </div>

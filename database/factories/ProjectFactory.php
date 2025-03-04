@@ -23,7 +23,7 @@ class ProjectFactory extends Factory
             'user_id' => fake()->numberBetween(1, 30),
             'status' => fake()->randomElement(array_column(ProjectsStatus::cases(), 'value')),
             'start_date' => fake()->date(),
-            'manager_assigned' => fake()->sentence(),
+            'manager_assigned' => fake()->name(),
             'end_date' => fake()->date(),
         ];
     }

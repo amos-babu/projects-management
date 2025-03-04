@@ -11,13 +11,24 @@ class Task extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'title',
+        'description',
+        'user_id',
+        'project_id',
+        'status',
+        'start_date',
+        'end_date',
+        'developer_assigned'
+    ];
+
     public $casts = [
         'status' => TaskStatus::class
     ];
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'assigned_to');
+        return $this->belongsTo(User::class,);
     }
 
     public function project()
