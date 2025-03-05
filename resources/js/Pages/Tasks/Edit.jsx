@@ -18,7 +18,7 @@ export default function Create({ developers, statusOptions, task }) {
     const { data, setData, put, errors, processing } = useForm({
         title: task.title,
         description: task.description,
-        status: task.status,
+        status: task.status.value,
         start_date: task.start_date,
         end_date: task.end_date,
         developer_assigned: task.developer_assigned,
@@ -93,7 +93,7 @@ export default function Create({ developers, statusOptions, task }) {
                                             <SelectValue placeholder="TODO" />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            {statusOptions.map(
+                                            {statusOptions?.map(
                                                 (statusOption, index) => (
                                                     <SelectItem
                                                         key={index}
@@ -101,7 +101,7 @@ export default function Create({ developers, statusOptions, task }) {
                                                             statusOption.value
                                                         }
                                                     >
-                                                        {statusOption.name}
+                                                        {statusOption.label}
                                                     </SelectItem>
                                                 )
                                             )}
@@ -173,7 +173,7 @@ export default function Create({ developers, statusOptions, task }) {
                                 </div>
 
                                 <Button type="submit" disabled={processing}>
-                                    Submit
+                                    Save
                                 </Button>
                             </form>
                         </div>

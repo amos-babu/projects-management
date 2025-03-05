@@ -31,7 +31,7 @@ export default function Index({ tasks }) {
                         <TableCell>{task.id}</TableCell>
                         <TableCell>
                             <Link
-                                className="hover:underline hover:text-blue-600"
+                                className="hover:underline hover:text-green-600"
                                 href={route("tasks.show", task.id)}
                             >
                                 {task.title}
@@ -40,21 +40,21 @@ export default function Index({ tasks }) {
                         <TableCell>
                             <Badge
                                 className={`${
-                                    task.status === "To do"
+                                    task.status.label === "To do"
                                         ? "bg-red-600"
-                                        : task.status === "In Progress"
+                                        : task.status.label === "In Progress"
                                         ? "bg-yellow-500"
-                                        : task.status === "Completed"
+                                        : task.status.label === "Completed"
                                         ? "bg-green-600"
                                         : ""
                                 }`}
                             >
-                                {task.status}
+                                {task.status.label}
                             </Badge>
                         </TableCell>
                         <TableCell>{task.start_date}</TableCell>
                         <TableCell>{task.end_date}</TableCell>
-                        <TableCell>{task.assigned_to.name}</TableCell>
+                        <TableCell>{task.developer_assigned}</TableCell>
                         <TableCell>
                             <Link
                                 className="mx-2"
@@ -62,7 +62,12 @@ export default function Index({ tasks }) {
                             >
                                 Edit
                             </Link>
-                            <AlertDialogDemo item={task} itemType ='task' itemName = {task.title} routeName='tasks.destroy' />
+                            <AlertDialogDemo
+                                item={task}
+                                itemType="task"
+                                itemName={task.title}
+                                routeName="tasks.destroy"
+                            />
                         </TableCell>
                     </TableRow>
                 ))}

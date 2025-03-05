@@ -75,19 +75,22 @@ export default function Index({ projects }) {
                                                 <TableCell>
                                                     <Badge
                                                         className={`${
-                                                            project.status ===
+                                                            project.status
+                                                                .label ===
                                                             "Pending"
                                                                 ? "bg-red-600"
-                                                                : project.status ===
+                                                                : project.status
+                                                                      .label ===
                                                                   "In Progress"
                                                                 ? "bg-yellow-500"
-                                                                : project.status ===
+                                                                : project.status
+                                                                      .label ===
                                                                   "Completed"
                                                                 ? "bg-green-600"
                                                                 : ""
                                                         }`}
                                                     >
-                                                        {project.status}
+                                                        {project.status.label}
                                                     </Badge>
                                                 </TableCell>
                                                 <TableCell>

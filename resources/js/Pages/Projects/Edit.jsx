@@ -18,7 +18,7 @@ export default function Edit({ managers, statusOptions, project }) {
     const { data, setData, put, errors, processing } = useForm({
         name: project.name,
         description: project.description,
-        status: project.status,
+        status: project.status.value,
         start_date: project.start_date,
         end_date: project.end_date,
         manager_assigned: project.manager_assigned,
@@ -74,6 +74,7 @@ export default function Edit({ managers, statusOptions, project }) {
                                         Project Description (Optional)
                                     </Label>
                                     <Textarea
+                                        value={data.description}
                                         onChange={(e) =>
                                             setData({
                                                 ...data,
@@ -90,8 +91,8 @@ export default function Edit({ managers, statusOptions, project }) {
                                             setData({ ...data, status: value })
                                         }
                                     >
-                                        <SelectTrigger className="w-[180px]">
-                                            <SelectValue placeholder="PENDING" />
+                                        <SelectTrigger className="w-[260px]">
+                                            <SelectValue placeholder="Select Status" />
                                         </SelectTrigger>
                                         <SelectContent>
                                             {statusOptions?.map(
@@ -145,7 +146,7 @@ export default function Edit({ managers, statusOptions, project }) {
                                 </div>
 
                                 <div className="mb-5">
-                                    <Label>Assigned Project Manager</Label>
+                                    <Label>Project Manager</Label>
                                     <Select
                                         value={data.manager_assigned}
                                         onValueChange={(value) =>
@@ -155,11 +156,11 @@ export default function Edit({ managers, statusOptions, project }) {
                                             })
                                         }
                                     >
-                                        <SelectTrigger className="w-[180px]">
-                                            <SelectValue placeholder="Amos Babu" />
+                                        <SelectTrigger className="w-[260px]">
+                                            <SelectValue placeholder="Select Project Manager" />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            {managers?.data?.map((manager) => (
+                                            {managers?.data.map((manager) => (
                                                 <SelectItem
                                                     key={manager.id}
                                                     value={manager.name}

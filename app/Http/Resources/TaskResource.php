@@ -8,7 +8,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class TaskResource extends JsonResource
 {
-    public static $wrap = false;
+    public static $wrap = null;
     /**
      * Transform the resource into an array.
      *
@@ -21,10 +21,13 @@ class TaskResource extends JsonResource
             "title" => $this->title,
             "description" => $this->description,
             "project_id" => $this->project_id,
-            "status" => $this->status->label(),
+            "status" => [
+                'label' => $this->status->label(),
+                'value' => $this->status->value
+                ],
             "start_date" => $this->start_date,
             "end_date" => $this->end_date,
-            "assigned_to" => new UserResource($this->user)
+            "developer_assigned" => $this->developer_assigned
         ];
     }
 }

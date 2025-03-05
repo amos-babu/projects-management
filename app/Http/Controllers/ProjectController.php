@@ -29,7 +29,7 @@ class ProjectController extends Controller
     {
         $managers = User::query()->where('role', UserRoles::MANAGER->value)->get();
         $statusOptions = collect(ProjectsStatus::cases())->map(fn($status)=> [
-            'name' => $status->name,
+            'name' => $status->label(),
             'value' => $status->value
         ]);
 
@@ -62,7 +62,7 @@ class ProjectController extends Controller
     {
         $projectManagers = User::query()->where('role', UserRoles::MANAGER->value)->get();
         $statusOptions = collect(ProjectsStatus::cases())->map(fn($status)=> [
-            'name' => $status->name,
+            'name' => $status->label(),
             'value' => $status->value
         ]);
 

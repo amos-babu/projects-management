@@ -26,7 +26,7 @@ class TaskController extends Controller
         $projectID = $request->query('project_id');
         $developers = User::query()->where('role', UserRoles::MEMBER->value)->get();
         $statusOptions = collect(TaskStatus::cases())->map(fn($status)=> [
-            'name' => $status->name,
+            'label' => $status->label(),
             'value' => $status->value
         ]);
         return Inertia::render('Tasks/Create', [
@@ -50,14 +50,16 @@ class TaskController extends Controller
 
     public function show(Task $task)
     {
-        //
+        return Inertia::render('Tasks/Show', [
+            'task' => new TaskResource($task)
+        ]);
     }
 
     public function edit(Task $task)
     {
         $developers = User::query()->where('role', UserRoles::MEMBER->value)->get();
         $statusOptions = collect(TaskStatus::cases())->map(fn($status)=> [
-            'name' => $status->name,
+            'label' => $status->label(),
             'value' => $status->value
         ]);
         return Inertia::render('Tasks/Edit', [

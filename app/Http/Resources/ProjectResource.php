@@ -8,7 +8,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class ProjectResource extends JsonResource
 {
-    public static $wrap = false;
+    public static $wrap = null;
     /**
      * Transform the resource into an array.
      *
@@ -21,7 +21,10 @@ class ProjectResource extends JsonResource
             "name" => $this->name,
             "description" => $this->description,
             "user_id" => $this->user_id,
-            "status" => $this->status->label(),
+            "status" => [
+                'label' => $this->status->label(),
+                'value' => $this->status->value
+                ],
             "start_date" => $this->start_date,
             "end_date" => $this->end_date,
             "manager_assigned" => $this->manager_assigned,

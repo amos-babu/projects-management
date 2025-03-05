@@ -90,8 +90,8 @@ export default function Create({ developers, statusOptions, projectID }) {
                                             setData({ ...data, status: value })
                                         }
                                     >
-                                        <SelectTrigger className="w-[180px]">
-                                            <SelectValue placeholder="TODO" />
+                                        <SelectTrigger className="w-[260px]">
+                                            <SelectValue placeholder="Select Task Status" />
                                         </SelectTrigger>
                                         <SelectContent>
                                             {statusOptions.map(
@@ -102,7 +102,7 @@ export default function Create({ developers, statusOptions, projectID }) {
                                                             statusOption.value
                                                         }
                                                     >
-                                                        {statusOption.name}
+                                                        {statusOption.label}
                                                     </SelectItem>
                                                 )
                                             )}
@@ -145,7 +145,7 @@ export default function Create({ developers, statusOptions, projectID }) {
                                 </div>
 
                                 <div className="mb-5">
-                                    <Label>Assigned Developer</Label>
+                                    <Label>Task Developer</Label>
                                     <Select
                                         value={data.developer_assigned}
                                         onValueChange={(value) =>
@@ -155,8 +155,8 @@ export default function Create({ developers, statusOptions, projectID }) {
                                             })
                                         }
                                     >
-                                        <SelectTrigger className="w-[180px]">
-                                            <SelectValue placeholder="Amos Babu" />
+                                        <SelectTrigger className="w-[260px]">
+                                            <SelectValue placeholder="Select Task Developer" />
                                         </SelectTrigger>
                                         <SelectContent>
                                             {developers?.data?.map(

@@ -2,19 +2,19 @@ import PrimaryButton from "@/Components/PrimaryButton";
 import { Badge } from "@/Components/ui/badge";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link } from "@inertiajs/react";
-import Index from "../Tasks/Index";
 import SuccessMessageDisplay from "@/Components/SuccessMessageDisplay";
 
-export default function Show({ project }) {
+export default function Show({ task }) {
+    console.log(task);
     return (
         <AuthenticatedLayout
             header={
                 <h2 className="text-xl font-semibold leading-tight text-gray-800">
-                    Project '{project.name}'
+                    Show Task
                 </h2>
             }
         >
-            <Head title={`Project '${project.name}'`} />
+            <Head title={`Task '${task.title}'`} />
 
             <div className="py-12">
                 <SuccessMessageDisplay />
@@ -23,45 +23,32 @@ export default function Show({ project }) {
                         <div className="p-6 text-gray-900">
                             <div className="flex flex-wrap justify-between mb-4 gap-7">
                                 <div className="mb-4 text-xl font-bold">
-                                    {project.name}
+                                    {task.title}
                                 </div>
                                 <div className="mb-4 text-xl font-bold">
                                     <Badge
                                         className={`${
-                                            project.status.label ===
-                                            "In Progress"
+                                            task.status.label === "In Progress"
                                                 ? "bg-yellow-500"
-                                                : project.status.label ===
+                                                : task.status.label ===
                                                   "Pending"
                                                 ? "bg-red-500"
-                                                : project.status.label ===
+                                                : task.status.label ===
                                                   "Completed"
                                                 ? "bg-green-500"
                                                 : ""
                                         }`}
                                     >
-                                        {project.status.label}
+                                        {task.status.label}
                                     </Badge>
                                 </div>
                                 <div>
                                     <div className="flex gap-3">
                                         <PrimaryButton className="mb-4">
                                             <Link
-                                                href={route("tasks.create", {
-                                                    project_id: project.id,
-                                                })}
+                                                href={route("tasks.edit", task)}
                                             >
-                                                Create Task
-                                            </Link>
-                                        </PrimaryButton>
-                                        <PrimaryButton className="mb-4">
-                                            <Link
-                                                href={route(
-                                                    "projects.edit",
-                                                    project
-                                                )}
-                                            >
-                                                Update Project
+                                                Update task
                                             </Link>
                                         </PrimaryButton>
                                     </div>
@@ -69,17 +56,13 @@ export default function Show({ project }) {
                             </div>
 
                             <div className="mb-5 font-medium">
-                                {project.description}
+                                {task.description}
                             </div>
 
                             <div className="font-medium ">
-                                <span className="mr-4">
-                                    Project Assigned By:
-                                </span>
-                                {project.description}
+                                <span className="mr-4">Task Assigned By:</span>
+                                {task.description}
                             </div>
-
-                            <Index tasks={project.tasks} />
                         </div>
                     </div>
                 </div>
