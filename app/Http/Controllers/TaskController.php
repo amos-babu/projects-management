@@ -16,11 +16,6 @@ use Inertia\Inertia;
 
 class TaskController extends Controller
 {
-    public function index()
-    {
-        //
-    }
-
     public function create(Request $request)
     {
         $projectID = $request->query('project_id');
