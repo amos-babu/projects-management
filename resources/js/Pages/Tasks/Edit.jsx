@@ -21,7 +21,7 @@ export default function Create({ developers, statusOptions, task }) {
         status: task.status.value,
         start_date: task.start_date,
         end_date: task.end_date,
-        developer_assigned: task.developer_assigned,
+        developer_assigned_id: task.developer_assigned_id,
     });
 
     const submitTask = (e) => {
@@ -146,23 +146,32 @@ export default function Create({ developers, statusOptions, task }) {
                                 <div className="mb-5">
                                     <Label>Assigned Developer</Label>
                                     <Select
-                                        value={data.developer_assigned}
+                                        value={data.developer_assigned_id}
                                         onValueChange={(value) =>
                                             setData({
                                                 ...data,
-                                                developer_assigned: value,
+                                                developer_assigned_id: value,
                                             })
                                         }
                                     >
                                         <SelectTrigger className="w-[180px]">
                                             <SelectValue placeholder="Amos Babu" />
+                                            <SelectValue placeholder="Select Project Manager">
+                                                {
+                                                    developers?.data?.find(
+                                                        (developer) =>
+                                                            developer.id ===
+                                                            data.developer_assigned_id
+                                                    )?.name
+                                                }
+                                            </SelectValue>
                                         </SelectTrigger>
                                         <SelectContent>
                                             {developers?.data?.map(
                                                 (developer) => (
                                                     <SelectItem
                                                         key={developer.id}
-                                                        value={developer.name}
+                                                        value={developer.id.toString()}
                                                     >
                                                         {developer.name}
                                                     </SelectItem>

@@ -19,7 +19,7 @@ class Task extends Model
         'status',
         'start_date',
         'end_date',
-        'developer_assigned'
+        'developer_assigned_id'
     ];
 
     public $casts = [

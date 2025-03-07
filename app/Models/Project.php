@@ -17,7 +17,7 @@ class Project extends Model
         'status',
         'start_date',
         'end_date',
-        'manager_assigned'
+        'manager_assigned_id'
     ];
 
     public $casts = [

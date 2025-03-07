@@ -21,12 +21,15 @@ export default function Create({ managers, statusOptions }) {
         status: "",
         start_date: "",
         end_date: "",
-        manager_assigned: "",
+        manager_assigned_id: 0,
     });
+
+    // console.log(managers.data);
 
     const submitProject = (e) => {
         e.preventDefault();
         post(route("projects.store"));
+        console.log(data);
     };
     return (
         <AuthenticatedLayout
@@ -148,22 +151,31 @@ export default function Create({ managers, statusOptions }) {
                                 <div className="mb-5">
                                     <Label>Project Manager</Label>
                                     <Select
-                                        value={data.manager_assigned}
+                                        value={data.manager_assigned_id}
                                         onValueChange={(value) =>
                                             setData({
                                                 ...data,
-                                                manager_assigned: value,
+                                                manager_assigned_id: value,
                                             })
                                         }
                                     >
                                         <SelectTrigger className="w-[260px]">
                                             <SelectValue placeholder="Select Project Manager" />
+                                            <SelectValue placeholder="Select Project Manager">
+                                                {
+                                                    managers?.data?.find(
+                                                        (manager) =>
+                                                            manager.id ===
+                                                            data.manager_assigned_id
+                                                    )?.name
+                                                }
+                                            </SelectValue>
                                         </SelectTrigger>
                                         <SelectContent>
                                             {managers?.data?.map((manager) => (
                                                 <SelectItem
                                                     key={manager.id}
-                                                    value={manager.name}
+                                                    value={manager.id.toString()}
                                                 >
                                                     {manager.name}
                                                 </SelectItem>

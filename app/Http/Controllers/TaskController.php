@@ -36,6 +36,7 @@ class TaskController extends Controller
         $data = $request->validated();
         $data['user_id'] = Auth::id();
         $data['project_id'] = (int)$request->project_id;
+        $data['developer_assigned_id'] = (int)$request->developer_assigned_id;
 
         Task::create($data);
 
@@ -67,7 +68,9 @@ class TaskController extends Controller
     public function update(UpdateTaskRequest $request, Task $task)
     {
         $project = $task->project->id;
-        $task->update($request->validated());
+        $data = $request->validated();
+        $data['developer_assigned_id'] = (int)$request->developer_assigned_id;
+        $task->update($data);
 
         return to_route('projects.show', $project)->with('success', 'Task Deleted Successfully!');
 

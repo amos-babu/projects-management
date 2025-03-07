@@ -21,7 +21,7 @@ export default function Create({ developers, statusOptions, projectID }) {
         status: "",
         start_date: "",
         end_date: "",
-        developer_assigned: "",
+        developer_assigned_id: 0,
         project_id: projectID,
     });
 
@@ -147,23 +147,32 @@ export default function Create({ developers, statusOptions, projectID }) {
                                 <div className="mb-5">
                                     <Label>Task Developer</Label>
                                     <Select
-                                        value={data.developer_assigned}
+                                        value={data.developer_assigned_id}
                                         onValueChange={(value) =>
                                             setData({
                                                 ...data,
-                                                developer_assigned: value,
+                                                developer_assigned_id: value,
                                             })
                                         }
                                     >
                                         <SelectTrigger className="w-[260px]">
                                             <SelectValue placeholder="Select Task Developer" />
+                                            <SelectValue placeholder="Select Project Manager">
+                                                {
+                                                    developers?.data?.find(
+                                                        (developer) =>
+                                                            developer.id ===
+                                                            data.developer_assigned_id
+                                                    )?.name
+                                                }
+                                            </SelectValue>
                                         </SelectTrigger>
                                         <SelectContent>
                                             {developers?.data?.map(
                                                 (developer) => (
                                                     <SelectItem
                                                         key={developer.id}
-                                                        value={developer.name}
+                                                        value={developer.id.toString()}
                                                     >
                                                         {developer.name}
                                                     </SelectItem>

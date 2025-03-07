@@ -12,6 +12,7 @@ use App\Http\Resources\ProjectResource;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 
 class ProjectController extends Controller
@@ -27,6 +28,7 @@ class ProjectController extends Controller
 
     public function create()
     {
+        // Gate::authorize('create', )
         $managers = User::query()->where('role', UserRoles::MANAGER->value)->get();
         $statusOptions = collect(ProjectsStatus::cases())->map(fn($status)=> [
             'name' => $status->label(),
@@ -43,6 +45,7 @@ class ProjectController extends Controller
     {
         $data = $request->validated();
         $data['user_id'] = Auth::id();
+        $data['manager_assigned_id'] = (int)$request->manager_assigned_id;
 
         Project::create($data);
 
@@ -76,6 +79,7 @@ class ProjectController extends Controller
     public function update(UpdateProjectRequest $request, Project $project)
     {
         $data = $request->validated();
+        $data['manager_assigned_id'] = (int)$request->manager_assigned_id;
         $project->update($data);
         return to_route('projects.index')->with('success', 'Project Successfully Updated!');
     }
