@@ -2,18 +2,18 @@
 
 namespace App\Policies;
 
+use App\Enums\UserRoles;
 use App\Models\Project;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
 
 class ProjectPolicy
 {
-    /**
-     * Determine whether the user can view any models.
-     */
     public function viewAny(User $user): bool
     {
-        return false;
+        return  $user->hasRole(UserRoles::ADMIN)||
+                $user->hasRole(UserRoles::MANAGER)||
+                $user->hasRole(UserRoles::MEMBER);
     }
 
     /**
@@ -21,6 +21,18 @@ class ProjectPolicy
      */
     public function view(User $user, Project $project): bool
     {
+        if($user->hasRole(UserRoles::ADMIN)){
+            return true;
+        }
+
+        if($user->hasRole(UserRoles::MANAGER) && $project->manager_assigned_id === $user->id){
+            return true;
+        }
+
+        if($user->hasRole(UserRoles::MEMBER) && $project->tasks()->where('developer_assigned_to', $user->id)->exists()){
+            return true;
+        }
+
         return false;
     }
 

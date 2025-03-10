@@ -64,13 +64,23 @@ class User extends Authenticatable
         return $this->role === $role->value;
      }
 
-    public function projects()
+    public function createdProjects()
     {
-        return $this->hasMany(Project::class);
+        return $this->hasMany(Project::class, 'user_id');
     }
 
-    public function tasks()
+    public function managedProjects()
     {
-        return $this->hasMany(Task::class);
+        return $this->hasMany(Project::class, 'manager_assigned_id');
+    }
+
+    public function createdTasks()
+    {
+        return $this->hasMany(Task::class, 'user_id');
+    }
+
+    public function developedTasks()
+    {
+        return $this->hasMany(Task::class, 'developer_assigned_id');
     }
 }

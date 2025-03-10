@@ -6,6 +6,7 @@ use App\Enums\TaskStatus;
 use App\Observers\TaskObserver;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Task extends Model
 {
@@ -26,9 +27,14 @@ class Task extends Model
         'status' => TaskStatus::class
     ];
 
-    public function user()
+    public function createdBy(): BelongsTo
     {
-        return $this->belongsTo(User::class,);
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function developedBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'developer_assigned_id');
     }
 
     public function project()

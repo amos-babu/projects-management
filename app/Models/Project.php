@@ -5,6 +5,8 @@ namespace App\Models;
 use App\Enums\ProjectsStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Project extends Model
 {
@@ -24,12 +26,17 @@ class Project extends Model
         'status' => ProjectsStatus::class
     ];
 
-    public function user()
+    public function createdBy(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function tasks()
+    public function managedBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'manager_assigned_id');
+    }
+
+    public function tasks(): HasMany
     {
         return $this->hasMany(Task::class);
     }

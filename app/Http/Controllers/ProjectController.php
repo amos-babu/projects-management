@@ -11,15 +11,23 @@ use App\Http\Requests\UpdateProjectRequest;
 use App\Http\Resources\ProjectResource;
 use App\Http\Resources\UserResource;
 use App\Models\User;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 
 class ProjectController extends Controller
 {
+    use AuthorizesRequests;
+
     public function index()
     {
-        $projects = Project::query()->latest()->paginate();
+        $this->authorize('viewAny', Auth::user());
+
+        $projects = Project::query()
+                    ->where(fn($query) => Gate::allows('view', $query))
+                    ->latest()
+                    ->paginate();
 
         return Inertia::render('Projects/Index', [
             'projects' => ProjectResource::collection($projects),
@@ -28,7 +36,6 @@ class ProjectController extends Controller
 
     public function create()
     {
-        // Gate::authorize('create', )
         $managers = User::query()->where('role', UserRoles::MANAGER->value)->get();
         $statusOptions = collect(ProjectsStatus::cases())->map(fn($status)=> [
             'name' => $status->label(),
@@ -54,6 +61,7 @@ class ProjectController extends Controller
 
     public function show(Project $project)
     {
+       dd(User::hasRole(UserRoles::ADMIN));
         $project->load('tasks');
 
         return Inertia::render('Projects/Show', [
