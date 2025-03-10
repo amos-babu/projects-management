@@ -52,7 +52,7 @@ export default function Index({ projects }) {
                                             <TableHead>Status</TableHead>
                                             <TableHead>Start Date</TableHead>
                                             <TableHead>End Date</TableHead>
-                                            <TableHead>Action</TableHead>
+                                            {/* <TableHead>Action</TableHead> */}
                                         </TableRow>
                                     </TableHeader>
                                     <TableBody>
@@ -99,7 +99,7 @@ export default function Index({ projects }) {
                                                 <TableCell>
                                                     {project.end_date}
                                                 </TableCell>
-                                                <TableCell>
+                                                {/* <TableCell>
                                                     <Link
                                                         className="mx-2"
                                                         href={route(
@@ -115,7 +115,7 @@ export default function Index({ projects }) {
                                                         routeName="projects.destroy"
                                                         itemName={project.name}
                                                     />
-                                                </TableCell>
+                                                </TableCell> */}
                                             </TableRow>
                                         ))}
                                     </TableBody>

@@ -4,6 +4,7 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link } from "@inertiajs/react";
 import Index from "../Tasks/Index";
 import SuccessMessageDisplay from "@/Components/SuccessMessageDisplay";
+import { AlertDialogDemo } from "@/Components/AlertDialogDemo";
 
 export default function Show({ project }) {
     return (
@@ -64,6 +65,12 @@ export default function Show({ project }) {
                                                 Update Project
                                             </Link>
                                         </PrimaryButton>
+                                        <AlertDialogDemo
+                                            item={project}
+                                            itemType="task"
+                                            routeName="projects.destroy"
+                                            itemName={project.name}
+                                        />
                                     </div>
                                 </div>
                             </div>

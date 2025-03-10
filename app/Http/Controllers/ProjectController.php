@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Enums\ProjectsStatus;
-use App\Enums\TaskStatus;
 use App\Enums\UserRoles;
 use App\Models\Project;
 use App\Http\Requests\StoreProjectRequest;
@@ -22,8 +21,6 @@ class ProjectController extends Controller
 
     public function index()
     {
-        $this->authorize('viewAny', Auth::user());
-
         $projects = Project::query()
                     ->where(fn($query) => Gate::allows('view', $query))
                     ->latest()
@@ -31,11 +28,15 @@ class ProjectController extends Controller
 
         return Inertia::render('Projects/Index', [
             'projects' => ProjectResource::collection($projects),
+            'can' => [
+                // 'update' => auth()->user()?->can('update', ),
+            ],
         ]);
     }
 
     public function create()
     {
+        $this->authorize('create', Project::class);
         $managers = User::query()->where('role', UserRoles::MANAGER->value)->get();
         $statusOptions = collect(ProjectsStatus::cases())->map(fn($status)=> [
             'name' => $status->label(),
@@ -61,7 +62,6 @@ class ProjectController extends Controller
 
     public function show(Project $project)
     {
-       dd(User::hasRole(UserRoles::ADMIN));
         $project->load('tasks');
 
         return Inertia::render('Projects/Show', [
