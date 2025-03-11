@@ -25,6 +25,10 @@ class ProjectResource extends JsonResource
                 'label' => $this->status->label(),
                 'value' => $this->status->value
                 ],
+            "permissions" => [
+                "canUpdate" => $request->user()?->can('update', $this->resource),
+                "canDelete" => $request->user()?->can('delete', $this->resource)
+            ],
             "start_date" => $this->start_date,
             "end_date" => $this->end_date,
             "manager_assigned_id" => $this->manager_assigned_id,

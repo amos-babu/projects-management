@@ -5,8 +5,10 @@ import { Head, Link } from "@inertiajs/react";
 import Index from "../Tasks/Index";
 import SuccessMessageDisplay from "@/Components/SuccessMessageDisplay";
 import { AlertDialogDemo } from "@/Components/AlertDialogDemo";
+import { Button } from "@/Components/ui/button";
 
 export default function Show({ project }) {
+    console.log(project);
     return (
         <AuthenticatedLayout
             header={
@@ -46,7 +48,7 @@ export default function Show({ project }) {
                                 </div>
                                 <div>
                                     <div className="flex gap-3">
-                                        <PrimaryButton className="mb-4">
+                                        <Button className="mb-4">
                                             <Link
                                                 href={route("tasks.create", {
                                                     project_id: project.id,
@@ -54,23 +56,28 @@ export default function Show({ project }) {
                                             >
                                                 Create Task
                                             </Link>
-                                        </PrimaryButton>
-                                        <PrimaryButton className="mb-4">
-                                            <Link
-                                                href={route(
-                                                    "projects.edit",
-                                                    project
-                                                )}
-                                            >
-                                                Update Project
-                                            </Link>
-                                        </PrimaryButton>
-                                        <AlertDialogDemo
-                                            item={project}
-                                            itemType="task"
-                                            routeName="projects.destroy"
-                                            itemName={project.name}
-                                        />
+                                        </Button>
+                                        {project.permissions.canUpdate && (
+                                            <Button className="mb-4">
+                                                <Link
+                                                    href={route(
+                                                        "projects.edit",
+                                                        project
+                                                    )}
+                                                >
+                                                    Update Project
+                                                </Link>
+                                            </Button>
+                                        )}
+
+                                        {project.permissions.canDelete && (
+                                            <AlertDialogDemo
+                                                item={project}
+                                                itemType="task"
+                                                routeName="projects.destroy"
+                                                itemName={project.name}
+                                            />
+                                        )}
                                     </div>
                                 </div>
                             </div>

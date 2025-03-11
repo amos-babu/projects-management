@@ -49,6 +49,7 @@ class ProjectController extends Controller
 
     public function store(StoreProjectRequest $request)
     {
+        $this->authorize('create', Project::class);
         $data = $request->validated();
         $data['user_id'] = Auth::id();
         $data['manager_assigned_id'] = (int)$request->manager_assigned_id;
@@ -69,6 +70,7 @@ class ProjectController extends Controller
 
     public function edit(Project $project)
     {
+        $this->authorize('update', $project);
         $projectManagers = User::query()->where('role', UserRoles::MANAGER->value)->get();
         $statusOptions = collect(ProjectsStatus::cases())->map(fn($status)=> [
             'name' => $status->label(),
@@ -84,6 +86,7 @@ class ProjectController extends Controller
 
     public function update(UpdateProjectRequest $request, Project $project)
     {
+        $this->authorize('update', $project);
         $data = $request->validated();
         $data['manager_assigned_id'] = (int)$request->manager_assigned_id;
         $project->update($data);
@@ -92,6 +95,7 @@ class ProjectController extends Controller
 
     public function destroy(Project $project)
     {
+        $this->authorize('delete', $project);
         $project->delete();
 
         return to_route('projects.index')->with('success', 'Project Successfully Deleted!');

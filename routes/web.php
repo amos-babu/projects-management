@@ -20,7 +20,6 @@ Route::get('/dashboard', function () {
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('projects', ProjectController::class);
-    // Route::resource('tasks', TaskController::class);
     Route::get('/tasks/create', [TaskController::class, 'create'])->name('tasks.create');
     Route::get('/tasks/{task}', [TaskController::class, 'show'])->name('tasks.show');
     Route::post('/tasks', [TaskController::class, 'store'])->name('tasks.store');
