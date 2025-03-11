@@ -7,7 +7,6 @@ import { Button } from "@/Components/ui/button";
 import { AlertDialogDemo } from "@/Components/AlertDialogDemo";
 
 export default function Show({ task }) {
-    console.log(task);
     return (
         <AuthenticatedLayout
             header={

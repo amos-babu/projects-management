@@ -157,7 +157,6 @@ export default function Edit({ managers, statusOptions, project }) {
                                         }
                                     >
                                         <SelectTrigger className="w-[260px]">
-                                            <SelectValue placeholder="Select Project Manager" />
                                             <SelectValue placeholder="Select Project Manager">
                                                 {
                                                     managers?.data?.find(

@@ -12,24 +12,41 @@ use App\Http\Resources\UserResource;
 use App\Models\Task;
 use App\Models\User;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 
 class ProjectController extends Controller
 {
     use AuthorizesRequests;
 
-    public function index()
+    public function index(Request $request)
     {
-        $projects = Project::query()
-                    ->where(fn($query) => Gate::allows('view', $query))
+        $user = $request->user();
+        $query = Project::query();
+
+        if($user->role->value === UserRoles::ADMIN->value){
+            $projects = $query
                     ->latest()
                     ->paginate();
+        } elseif ($user->role->value === UserRoles::MANAGER->value) {
+            $projects = $query
+                    ->where('manager_assigned_id', $user->id)
+                    ->latest()
+                    ->paginate();
+        } else {
+            $projects = $query
+                    ->whereHas('tasks', function($q) use ($user){
+                        $q->where('developer_assigned_id', $user->id);
+                    })
+                    ->latest()
+                    ->paginate();
+        }
+
 
         return Inertia::render('Projects/Index', [
             'projects' => ProjectResource::collection($projects),
-            'canCreate' => Auth::user()?->can('create', Project::class),
+            'canCreatePolicy' => Auth::user()?->can('create', Project::class),
         ]);
     }
 
