@@ -8,7 +8,6 @@ import { AlertDialogDemo } from "@/Components/AlertDialogDemo";
 import { Button } from "@/Components/ui/button";
 
 export default function Show({ project }) {
-    console.log(project);
     return (
         <AuthenticatedLayout
             header={

@@ -61,7 +61,7 @@ class ProjectController extends Controller
 
     public function show(Project $project)
     {
-        $project->load('tasks');
+        $project->load(['tasks', 'tasks.developedBy']);
 
         return Inertia::render('Projects/Show', [
             'project' => new ProjectResource($project),

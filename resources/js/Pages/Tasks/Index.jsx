@@ -54,7 +54,7 @@ export default function Index({ tasks }) {
                         </TableCell>
                         <TableCell>{task.start_date}</TableCell>
                         <TableCell>{task.end_date}</TableCell>
-                        <TableCell>{task.developer_assigned}</TableCell>
+                        <TableCell>{task.developed_by.name}</TableCell>
                         <TableCell>
                             <Link
                                 className="mx-2"
