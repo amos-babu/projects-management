@@ -22,7 +22,7 @@ import {
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link } from "@inertiajs/react";
 
-export default function Index({ projects }) {
+export default function Index({ projects, canCreatePolicy }) {
     return (
         <AuthenticatedLayout
             header={
@@ -36,11 +36,13 @@ export default function Index({ projects }) {
                 <SuccessMessageDisplay />
 
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
-                    <PrimaryButton className="mb-4">
-                        <Link href={route("projects.create")}>
-                            Create Project
-                        </Link>
-                    </PrimaryButton>
+                    {canCreatePolicy && (
+                        <PrimaryButton className="mb-4">
+                            <Link href={route("projects.create")}>
+                                Create Project
+                            </Link>
+                        </PrimaryButton>
+                    )}
                     <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg">
                         <div className="p-6 text-gray-900">
                             <div className="relative overflow-x-auto">
@@ -52,7 +54,6 @@ export default function Index({ projects }) {
                                             <TableHead>Status</TableHead>
                                             <TableHead>Start Date</TableHead>
                                             <TableHead>End Date</TableHead>
-                                            {/* <TableHead>Action</TableHead> */}
                                         </TableRow>
                                     </TableHeader>
                                     <TableBody>
@@ -99,23 +100,6 @@ export default function Index({ projects }) {
                                                 <TableCell>
                                                     {project.end_date}
                                                 </TableCell>
-                                                {/* <TableCell>
-                                                    <Link
-                                                        className="mx-2"
-                                                        href={route(
-                                                            "projects.edit",
-                                                            project.id
-                                                        )}
-                                                    >
-                                                        Edit
-                                                    </Link>
-                                                    <AlertDialogDemo
-                                                        item={project}
-                                                        itemType="task"
-                                                        routeName="projects.destroy"
-                                                        itemName={project.name}
-                                                    />
-                                                </TableCell> */}
                                             </TableRow>
                                         ))}
                                     </TableBody>

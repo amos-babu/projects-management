@@ -28,9 +28,7 @@ class ProjectController extends Controller
 
         return Inertia::render('Projects/Index', [
             'projects' => ProjectResource::collection($projects),
-            'can' => [
-                // 'update' => auth()->user()?->can('update', ),
-            ],
+            'canCreate' => Auth::user()?->can('create', Project::class),
         ]);
     }
 
