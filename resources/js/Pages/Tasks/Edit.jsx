@@ -21,8 +21,9 @@ export default function Create({ developers, statusOptions, task }) {
         status: task.status.value,
         start_date: task.start_date,
         end_date: task.end_date,
-        developer_assigned_id: task.developer_assigned_id,
+        developer_assigned_id: task.developed_by.id,
     });
+    console.log(task, developers);
 
     const submitTask = (e) => {
         e.preventDefault();
@@ -155,7 +156,6 @@ export default function Create({ developers, statusOptions, task }) {
                                         }
                                     >
                                         <SelectTrigger className="w-[180px]">
-                                            <SelectValue placeholder="Amos Babu" />
                                             <SelectValue placeholder="Select Project Manager">
                                                 {
                                                     developers?.data?.find(

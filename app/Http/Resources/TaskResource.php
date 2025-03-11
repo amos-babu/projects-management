@@ -25,6 +25,10 @@ class TaskResource extends JsonResource
                 'label' => $this->status->label(),
                 'value' => $this->status->value
                 ],
+            "permission" => [
+                "canUpdate" => $request->user()?->can('update', $this->resource),
+                "canDelete" => $request->user()?->can('delete', $this->resource)
+            ],
             "start_date" => $this->start_date,
             "end_date" => $this->end_date,
             "developed_by" => new UserResource($this->developedBy)

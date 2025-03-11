@@ -9,6 +9,7 @@ use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
 use App\Http\Resources\ProjectResource;
 use App\Http\Resources\UserResource;
+use App\Models\Task;
 use App\Models\User;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Auth;
@@ -65,6 +66,7 @@ class ProjectController extends Controller
 
         return Inertia::render('Projects/Show', [
             'project' => new ProjectResource($project),
+            'canCreate' => Auth::user()?->can('create', Task::class)
         ]);
     }
 

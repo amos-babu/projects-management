@@ -7,7 +7,6 @@ import {
     TableHeader,
     TableRow,
 } from "@/Components/ui/table";
-import { AlertDialogDemo } from "@/Components/AlertDialogDemo";
 import { Link } from "@inertiajs/react";
 import { Badge } from "@/Components/ui/badge";
 
@@ -22,7 +21,6 @@ export default function Index({ tasks }) {
                     <TableHead>Start Date</TableHead>
                     <TableHead>End Date</TableHead>
                     <TableHead>Assigned To</TableHead>
-                    <TableHead>Action</TableHead>
                 </TableRow>
             </TableHeader>
             <TableBody>
@@ -55,20 +53,6 @@ export default function Index({ tasks }) {
                         <TableCell>{task.start_date}</TableCell>
                         <TableCell>{task.end_date}</TableCell>
                         <TableCell>{task.developed_by.name}</TableCell>
-                        <TableCell>
-                            <Link
-                                className="mx-2"
-                                href={route("tasks.edit", task.id)}
-                            >
-                                Edit
-                            </Link>
-                            <AlertDialogDemo
-                                item={task}
-                                itemType="task"
-                                itemName={task.title}
-                                routeName="tasks.destroy"
-                            />
-                        </TableCell>
                     </TableRow>
                 ))}
             </TableBody>

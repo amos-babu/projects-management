@@ -7,7 +7,7 @@ import SuccessMessageDisplay from "@/Components/SuccessMessageDisplay";
 import { AlertDialogDemo } from "@/Components/AlertDialogDemo";
 import { Button } from "@/Components/ui/button";
 
-export default function Show({ project }) {
+export default function Show({ project, canCreate }) {
     return (
         <AuthenticatedLayout
             header={
@@ -47,15 +47,21 @@ export default function Show({ project }) {
                                 </div>
                                 <div>
                                     <div className="flex gap-3">
-                                        <Button className="mb-4">
-                                            <Link
-                                                href={route("tasks.create", {
-                                                    project_id: project.id,
-                                                })}
-                                            >
-                                                Create Task
-                                            </Link>
-                                        </Button>
+                                        {canCreate && (
+                                            <Button className="mb-4">
+                                                <Link
+                                                    href={route(
+                                                        "tasks.create",
+                                                        {
+                                                            project_id:
+                                                                project.id,
+                                                        }
+                                                    )}
+                                                >
+                                                    Create Task
+                                                </Link>
+                                            </Button>
+                                        )}
                                         {project.permissions.canUpdate && (
                                             <Button className="mb-4">
                                                 <Link
@@ -89,7 +95,7 @@ export default function Show({ project }) {
                                 <span className="mr-4">
                                     Project Assigned By:
                                 </span>
-                                {project.description}
+                                {project.created_by.name}
                             </div>
 
                             <Index tasks={project.tasks} />

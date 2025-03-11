@@ -10,14 +10,18 @@ use App\Http\Requests\UpdateTaskRequest;
 use App\Http\Resources\TaskResource;
 use App\Http\Resources\UserResource;
 use App\Models\User;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class TaskController extends Controller
 {
+    use AuthorizesRequests;
+
     public function create(Request $request)
     {
+        $this->authorize('create', Task::class);
         $projectID = $request->query('project_id');
         $developers = User::query()->where('role', UserRoles::MEMBER->value)->get();
         $statusOptions = collect(TaskStatus::cases())->map(fn($status)=> [
@@ -33,6 +37,7 @@ class TaskController extends Controller
 
     public function store(StoreTaskRequest $request)
     {
+        $this->authorize('create', Task::class);
         $data = $request->validated();
         $data['user_id'] = Auth::id();
         $data['project_id'] = (int)$request->project_id;
@@ -53,6 +58,7 @@ class TaskController extends Controller
 
     public function edit(Task $task)
     {
+        $this->authorize('update', $task);
         $developers = User::query()->where('role', UserRoles::MEMBER->value)->get();
         $statusOptions = collect(TaskStatus::cases())->map(fn($status)=> [
             'label' => $status->label(),
@@ -67,6 +73,7 @@ class TaskController extends Controller
 
     public function update(UpdateTaskRequest $request, Task $task)
     {
+        $this->authorize('update', $task);
         $project = $task->project->id;
         $data = $request->validated();
         $data['developer_assigned_id'] = (int)$request->developer_assigned_id;
@@ -78,6 +85,7 @@ class TaskController extends Controller
 
     public function destroy(Task $task)
     {
+        $this->authorize('delete', $task);
         $project = $task->project->id;
         $task->delete();
 

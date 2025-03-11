@@ -3,6 +3,8 @@ import { Badge } from "@/Components/ui/badge";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link } from "@inertiajs/react";
 import SuccessMessageDisplay from "@/Components/SuccessMessageDisplay";
+import { Button } from "@/Components/ui/button";
+import { AlertDialogDemo } from "@/Components/AlertDialogDemo";
 
 export default function Show({ task }) {
     console.log(task);
@@ -44,13 +46,27 @@ export default function Show({ task }) {
                                 </div>
                                 <div>
                                     <div className="flex gap-3">
-                                        <PrimaryButton className="mb-4">
-                                            <Link
-                                                href={route("tasks.edit", task)}
-                                            >
-                                                Update task
-                                            </Link>
-                                        </PrimaryButton>
+                                        {task.permission.canUpdate && (
+                                            <Button className="mb-4">
+                                                <Link
+                                                    href={route(
+                                                        "tasks.edit",
+                                                        task
+                                                    )}
+                                                >
+                                                    Update Task
+                                                </Link>
+                                            </Button>
+                                        )}
+
+                                        {task.permission.canDelete && (
+                                            <AlertDialogDemo
+                                                item={task}
+                                                itemType="task"
+                                                routeName="tasks.destroy"
+                                                itemName={task.title}
+                                            />
+                                        )}
                                     </div>
                                 </div>
                             </div>

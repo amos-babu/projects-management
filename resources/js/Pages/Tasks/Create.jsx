@@ -157,7 +157,7 @@ export default function Create({ developers, statusOptions, projectID }) {
                                     >
                                         <SelectTrigger className="w-[260px]">
                                             <SelectValue placeholder="Select Task Developer" />
-                                            <SelectValue placeholder="Select Project Manager">
+                                            <SelectValue placeholder="Select Task Developer">
                                                 {
                                                     developers?.data?.find(
                                                         (developer) =>
