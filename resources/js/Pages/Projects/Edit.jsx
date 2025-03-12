@@ -21,7 +21,7 @@ export default function Edit({ managers, statusOptions, project }) {
         status: project.status.value,
         start_date: project.start_date,
         end_date: project.end_date,
-        manager_assigned_id: project.manager_assigned_id,
+        manager_assigned_id: project.managed_by.id,
     });
 
     const updateProject = (e) => {
