@@ -104,7 +104,7 @@ export default function Index({ projects, canCreatePolicy }) {
                                                                                   .status
                                                                                   .label ===
                                                                               "In Progress"
-                                                                            ? "bg-yellow-500"
+                                                                            ? "bg-yellow-600"
                                                                             : project
                                                                                   .status
                                                                                   .label ===

@@ -1,7 +1,17 @@
+import {
+    Card,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from "@/Components/ui/card";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head } from "@inertiajs/react";
 
-export default function Dashboard({ projects }) {
+export default function Dashboard({ statusCount }) {
+    // console.log(statusCount.Completed);
+    Object.entries(statusCount).map(([status, count]) =>
+        console.log(status, count)
+    );
     return (
         <AuthenticatedLayout
             header={
@@ -13,12 +23,29 @@ export default function Dashboard({ projects }) {
             <Head title="Dashboard" />
 
             <div className="py-12">
-                <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
-                    <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg">
-                        <div className="p-6 text-gray-900">
-                            You're logged in!
-                        </div>
-                    </div>
+                <div className="flex flex-wrap justify-center gap-10 mx-auto max-w-7xl sm:px-6 lg:px-8">
+                    {Object.entries(statusCount).map(([status, count]) => (
+                        <Card
+                            className={`w-1/4 h-40 grow ${
+                                status === "Pending"
+                                    ? "bg-red-500"
+                                    : status === "In Progress"
+                                    ? "bg-yellow-500"
+                                    : status === "Completed"
+                                    ? "bg-green-500"
+                                    : ""
+                            }`}
+                        >
+                            <CardHeader className="text-center">
+                                <CardTitle className="text-2xl text-white">
+                                    {status}
+                                </CardTitle>
+                                <CardDescription className="text-xl text-white">
+                                    {count}
+                                </CardDescription>
+                            </CardHeader>
+                        </Card>
+                    ))}
                 </div>
             </div>
         </AuthenticatedLayout>
