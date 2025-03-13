@@ -8,10 +8,6 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head } from "@inertiajs/react";
 
 export default function Dashboard({ statusCount }) {
-    // console.log(statusCount.Completed);
-    Object.entries(statusCount).map(([status, count]) =>
-        console.log(status, count)
-    );
     return (
         <AuthenticatedLayout
             header={

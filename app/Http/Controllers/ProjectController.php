@@ -11,6 +11,7 @@ use App\Http\Resources\ProjectResource;
 use App\Http\Resources\UserResource;
 use App\Models\Task;
 use App\Models\User;
+use App\Actions\DisplayProjectsAction;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -20,29 +21,12 @@ class ProjectController extends Controller
 {
     use AuthorizesRequests;
 
-    public function index(Request $request)
+    public function index(Request $request, DisplayProjectsAction $displayProjectsAction)
     {
         $user = $request->user();
         $query = Project::query();
 
-        if($user->role->value === UserRoles::ADMIN->value){
-            $projects = $query
-                    ->latest()
-                    ->paginate();
-        } elseif ($user->role->value === UserRoles::MANAGER->value) {
-            $projects = $query
-                    ->where('manager_assigned_id', $user->id)
-                    ->latest()
-                    ->paginate();
-        } else {
-            $projects = $query
-                    ->whereHas('tasks', function($q) use ($user){
-                        $q->where('developer_assigned_id', $user->id);
-                    })
-                    ->latest()
-                    ->paginate();
-        }
-
+        $projects = $displayProjectsAction->handle($query, $user);
 
         return Inertia::render('Projects/Index', [
             'projects' => ProjectResource::collection($projects),

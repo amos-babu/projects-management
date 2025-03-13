@@ -23,6 +23,7 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link } from "@inertiajs/react";
 
 export default function Index({ projects, canCreatePolicy }) {
+    // console.log(projects)
     return (
         <AuthenticatedLayout
             header={
