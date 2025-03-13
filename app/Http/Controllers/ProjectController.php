@@ -21,12 +21,12 @@ class ProjectController extends Controller
 {
     use AuthorizesRequests;
 
-    public function index(Request $request, DisplayProjectsAction $displayProjectsAction)
+    public function index(Request $request)
     {
         $user = $request->user();
         $query = Project::query();
 
-        $projects = $displayProjectsAction::handle($query, $user);
+        $projects = DisplayProjectsAction::handle($query, $user);
 
         return Inertia::render('Projects/Index', [
             'projects' => ProjectResource::collection($projects),
