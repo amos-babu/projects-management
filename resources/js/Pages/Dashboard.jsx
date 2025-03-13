@@ -22,6 +22,7 @@ export default function Dashboard({ statusCount }) {
                 <div className="flex flex-wrap justify-center gap-10 mx-auto max-w-7xl sm:px-6 lg:px-8">
                     {Object.entries(statusCount).map(([status, count]) => (
                         <Card
+                            key={status}
                             className={`w-1/4 h-40 grow ${
                                 status === "Pending"
                                     ? "bg-red-500"
