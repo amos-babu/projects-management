@@ -26,7 +26,7 @@ class ProjectController extends Controller
         $user = $request->user();
         $query = Project::query();
 
-        $projects = $displayProjectsAction->handle($query, $user);
+        $projects = $displayProjectsAction::handle($query, $user);
 
         return Inertia::render('Projects/Index', [
             'projects' => ProjectResource::collection($projects),
