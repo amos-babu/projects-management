@@ -20,10 +20,23 @@ import {
     TableRow,
 } from "@/Components/ui/table";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Head, Link } from "@inertiajs/react";
+import { Head, Link, usePage } from "@inertiajs/react";
+import { useEffect, useState } from "react";
+import { toast, Toaster } from "sonner";
 
 export default function Index({ projects, canCreatePolicy }) {
-    // console.log(projects)
+    const { flash } = usePage().props;
+    const [successMessage, setSuccessMessage] = useState(flash.success);
+
+    if (successMessage) {
+        setSuccessMessage(null);
+        toast.success(successMessage);
+    }
+
+    useEffect(() => {
+        setSuccessMessage(flash.success);
+    }, [flash.success]);
+
     return (
         <AuthenticatedLayout
             header={
@@ -34,8 +47,7 @@ export default function Index({ projects, canCreatePolicy }) {
         >
             <Head title="Projects" />
             <div className="py-12">
-                <SuccessMessageDisplay />
-
+                <Toaster position="top-right" />
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
                     {canCreatePolicy && (
                         <PrimaryButton className="mb-4">

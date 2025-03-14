@@ -1,12 +1,25 @@
 import { Badge } from "@/Components/ui/badge";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Head, Link } from "@inertiajs/react";
+import { Head, Link, usePage } from "@inertiajs/react";
 import Index from "../Tasks/Index";
 import SuccessMessageDisplay from "@/Components/SuccessMessageDisplay";
 import { AlertDialogDemo } from "@/Components/AlertDialogDemo";
 import { Button } from "@/Components/ui/button";
+import { toast, Toaster } from "sonner";
+import { useEffect, useState } from "react";
 
 export default function Show({ project, canCreate }) {
+    const { flash } = usePage().props;
+    const [successMessage, setSuccessMessage] = useState(flash.success);
+
+    if (successMessage) {
+        setSuccessMessage(null);
+        toast.success(successMessage);
+    }
+
+    useEffect(() => {
+        setSuccessMessage(flash.success);
+    }, [flash.success]);
     return (
         <AuthenticatedLayout
             header={
@@ -18,7 +31,7 @@ export default function Show({ project, canCreate }) {
             <Head title={`Project '${project.name}'`} />
 
             <div className="py-12">
-                <SuccessMessageDisplay />
+                <Toaster position="top-right" toastOptions={`success`} />
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
                     <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg">
                         <div className="p-6 text-gray-900">

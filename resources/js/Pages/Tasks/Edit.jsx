@@ -23,7 +23,6 @@ export default function Create({ developers, statusOptions, task }) {
         end_date: task.end_date,
         developer_assigned_id: task.developed_by.id,
     });
-    console.log(task, developers);
 
     const submitTask = (e) => {
         e.preventDefault();

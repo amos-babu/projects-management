@@ -79,7 +79,7 @@ class TaskController extends Controller
         $data['developer_assigned_id'] = (int)$request->developer_assigned_id;
         $task->update($data);
 
-        return to_route('projects.show', $project)->with('success', 'Task Deleted Successfully!');
+        return to_route('projects.show', $project)->with('success', 'Task Updated Successfully!');
 
     }
 
