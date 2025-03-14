@@ -58,7 +58,8 @@ class ProjectController extends Controller
 
         Project::create($data);
 
-        return to_route('projects.index')->with('success', 'Project Successfully Created!');
+        return to_route('projects.index')
+                ->with('success', 'Project Created Successfully!');
     }
 
     public function show(Project $project)
@@ -93,7 +94,8 @@ class ProjectController extends Controller
         $data = $request->validated();
         $data['manager_assigned_id'] = (int)$request->manager_assigned_id;
         $project->update($data);
-        return to_route('projects.index')->with('success', 'Project Successfully Updated!');
+        return to_route('projects.index')
+                ->with('success', 'Project Updated Successfully!');
     }
 
     public function destroy(Project $project)
@@ -101,6 +103,7 @@ class ProjectController extends Controller
         $this->authorize('delete', $project);
         $project->delete();
 
-        return to_route('projects.index')->with('success', 'Project Successfully Deleted!');
+        return to_route('projects.index')
+                ->with('success', 'Project Deleted Successfully!');
     }
 }

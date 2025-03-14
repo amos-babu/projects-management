@@ -46,7 +46,7 @@ class TaskController extends Controller
         Task::create($data);
 
         return to_route('projects.show', $request->project_id)
-        ->with('success', 'Task Created Successfully!');
+                ->with('success', 'Task Created Successfully!');
     }
 
     public function show(Task $task)
@@ -79,7 +79,8 @@ class TaskController extends Controller
         $data['developer_assigned_id'] = (int)$request->developer_assigned_id;
         $task->update($data);
 
-        return to_route('projects.show', $project)->with('success', 'Task Updated Successfully!');
+        return to_route('projects.show', $project)
+                ->with('success', 'Task Updated Successfully!');
 
     }
 
@@ -89,6 +90,7 @@ class TaskController extends Controller
         $project = $task->project->id;
         $task->delete();
 
-        return to_route('projects.show', $project)->with('success', 'Task Deleted Successfully!');
+        return to_route('projects.show', $project)
+                ->with('success', 'Task Deleted Successfully!');
     }
 }
