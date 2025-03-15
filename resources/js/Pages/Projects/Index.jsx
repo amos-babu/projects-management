@@ -1,6 +1,5 @@
 import { AlertDialogDemo } from "@/Components/AlertDialogDemo";
 import PrimaryButton from "@/Components/PrimaryButton";
-import SuccessMessageDisplay from "@/Components/SuccessMessageDisplay";
 import { Badge } from "@/Components/ui/badge";
 import {
     Pagination,

@@ -12,6 +12,7 @@ use App\Http\Resources\UserResource;
 use App\Models\Task;
 use App\Models\User;
 use App\Actions\DisplayProjectsAction;
+use App\Events\ProjectCreated;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -55,6 +56,8 @@ class ProjectController extends Controller
         $data = $request->validated();
         $data['user_id'] = Auth::id();
         $data['manager_assigned_id'] = (int)$request->manager_assigned_id;
+
+        event(new ProjectCreated($data));
 
         Project::create($data);
 

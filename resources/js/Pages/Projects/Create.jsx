@@ -29,7 +29,6 @@ export default function Create({ managers, statusOptions }) {
     const submitProject = (e) => {
         e.preventDefault();
         post(route("projects.store"));
-        console.log(data);
     };
     return (
         <AuthenticatedLayout

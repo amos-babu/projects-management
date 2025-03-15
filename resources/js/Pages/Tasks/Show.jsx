@@ -1,8 +1,6 @@
-import PrimaryButton from "@/Components/PrimaryButton";
 import { Badge } from "@/Components/ui/badge";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link } from "@inertiajs/react";
-import SuccessMessageDisplay from "@/Components/SuccessMessageDisplay";
 import { Button } from "@/Components/ui/button";
 import { AlertDialogDemo } from "@/Components/AlertDialogDemo";
 
@@ -18,7 +16,6 @@ export default function Show({ task }) {
             <Head title={`Task '${task.title}'`} />
 
             <div className="py-12">
-                <SuccessMessageDisplay />
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
                     <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg">
                         <div className="p-6 text-gray-900">

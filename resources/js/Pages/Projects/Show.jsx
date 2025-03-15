@@ -2,7 +2,6 @@ import { Badge } from "@/Components/ui/badge";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link, usePage } from "@inertiajs/react";
 import Index from "../Tasks/Index";
-import SuccessMessageDisplay from "@/Components/SuccessMessageDisplay";
 import { AlertDialogDemo } from "@/Components/AlertDialogDemo";
 import { Button } from "@/Components/ui/button";
 import { toast, Toaster } from "sonner";
