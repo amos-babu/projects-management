@@ -32,6 +32,7 @@ class ProjectController extends Controller
         return Inertia::render('Projects/Index', [
             'projects' => ProjectResource::collection($projects),
             'canCreatePolicy' => Auth::user()?->can('create', Project::class),
+            'authUserId' => auth()->id()
         ]);
     }
 
@@ -57,9 +58,9 @@ class ProjectController extends Controller
         $data['user_id'] = Auth::id();
         $data['manager_assigned_id'] = (int)$request->manager_assigned_id;
 
-        event(new ProjectCreated($data));
+        $project = Project::create($data);
 
-        Project::create($data);
+        event(new ProjectCreated($project));
 
         return to_route('projects.index')
                 ->with('success', 'Project Created Successfully!');

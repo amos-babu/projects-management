@@ -1,4 +1,3 @@
-import { AlertDialogDemo } from "@/Components/AlertDialogDemo";
 import PrimaryButton from "@/Components/PrimaryButton";
 import { Badge } from "@/Components/ui/badge";
 import {
@@ -23,7 +22,7 @@ import { Head, Link, usePage } from "@inertiajs/react";
 import { useEffect, useState } from "react";
 import { toast, Toaster } from "sonner";
 
-export default function Index({ projects, canCreatePolicy }) {
+export default function Index({ projects, canCreatePolicy, authUserId }) {
     const { flash } = usePage().props;
     const [successMessage, setSuccessMessage] = useState(flash.success);
 
@@ -35,6 +34,19 @@ export default function Index({ projects, canCreatePolicy }) {
     useEffect(() => {
         setSuccessMessage(flash.success);
     }, [flash.success]);
+
+    useEffect(() => {
+        window.Echo.private(`projects.${authUserId}`).listen(
+            "ProjectCreated",
+            (event) => {
+                toast.success("New Project Added");
+            }
+        );
+
+        return () => {
+            window.Echo.leaveChannel(`projects.${authUserId}`);
+        };
+    }, []);
 
     return (
         <AuthenticatedLayout

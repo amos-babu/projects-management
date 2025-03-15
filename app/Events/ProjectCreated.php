@@ -13,7 +13,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class ProjectCreated implements ShouldBroadcastNow
+class ProjectCreated implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -27,11 +27,11 @@ class ProjectCreated implements ShouldBroadcastNow
     public function broadcastOn(): array
     {
         return [
-            new Channel('projects'),
+            new PrivateChannel('projects.' .$this->project->user_id),
         ];
     }
 
-    public function broadcastWith(): array
+    public function broadcastWith()
     {
         return [
             'id' => $this->project->id,
