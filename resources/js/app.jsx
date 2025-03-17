@@ -1,9 +1,10 @@
 import "../css/app.css";
 import "./bootstrap";
 
-import { createInertiaApp } from "@inertiajs/react";
+import { createInertiaApp, usePage } from "@inertiajs/react";
 import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
 import { createRoot } from "react-dom/client";
+import { ProjectUpdateProvider } from "./Components/Utilities/ProjectsUpdateContext";
 
 const appName = import.meta.env.VITE_APP_NAME || "Laravel";
 
@@ -16,8 +17,13 @@ createInertiaApp({
         ),
     setup({ el, App, props }) {
         const root = createRoot(el);
+        const { auth } = props.initialPage.props;
 
-        root.render(<App {...props} />);
+        root.render(
+            <ProjectUpdateProvider auth={auth}>
+                <App {...props} />
+            </ProjectUpdateProvider>
+        );
     },
     progress: {
         color: "#1c4bcf",

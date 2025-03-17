@@ -18,7 +18,7 @@ import {
     TableRow,
 } from "@/Components/ui/table";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Head, Link, usePage } from "@inertiajs/react";
+import { Head, Link, router, usePage } from "@inertiajs/react";
 import { useEffect, useState } from "react";
 import { toast, Toaster } from "sonner";
 
@@ -36,11 +36,21 @@ export default function Index({ projects, canCreatePolicy, authUserId }) {
     }, [flash.success]);
 
     useEffect(() => {
+        if (!authUserId) {
+            return;
+        }
         window.Echo.private(`projects.${authUserId}`).listen(
             "ProjectCreated",
             (event) => {
-                toast.success("New Project Added");
-                console.log(event);
+                toast.info("New Project Added", {
+                    action: {
+                        label: "View Project",
+                        onClick: () => {
+                            router.visit(route("projects.show", event.id));
+                        },
+                    },
+                });
+                console.log(event.id);
             }
         );
 
