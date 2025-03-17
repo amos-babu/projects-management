@@ -1,4 +1,4 @@
-import { router, usePage } from "@inertiajs/react";
+import { router } from "@inertiajs/react";
 import { toast } from "sonner";
 
 import { createContext, useContext, useEffect, useState } from "react";
@@ -16,17 +16,24 @@ export const ProjectUpdateProvider = ({ children, auth }) => {
                 const message =
                     event.actionType === "created"
                         ? "New Project Added"
-                        : "Project Updated";
+                        : event.actionType === "updated"
+                        ? "Project Updated"
+                        : "Project Deleted";
                 setNotifications((prev) => [...prev, event]);
                 toast.info(message, {
-                    action: {
-                        label: "View Project",
-                        onClick: () => {
-                            router.visit(route("projects.show", event.id));
-                        },
-                    },
+                    action:
+                        event.actionType !== "deleted"
+                            ? {
+                                  label: "View Project",
+                                  onClick: () => {
+                                      router.visit(
+                                          route("projects.show", event.id)
+                                      );
+                                  },
+                              }
+                            : undefined,
                 });
-                console.log(event.id);
+                console.log(event);
             }
         );
 

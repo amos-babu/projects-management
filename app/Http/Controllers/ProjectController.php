@@ -13,6 +13,7 @@ use App\Models\Task;
 use App\Models\User;
 use App\Actions\DisplayProjectsAction;
 use App\Events\ProjectCreated;
+use App\Events\ProjectDeleted;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -107,6 +108,8 @@ class ProjectController extends Controller
     {
         $this->authorize('delete', $project);
         $project->delete();
+
+        broadcast(new ProjectDeleted($project->managedBy->id))->toOthers();
 
         return to_route('projects.index')
                 ->with('success', 'Project Deleted Successfully!');
