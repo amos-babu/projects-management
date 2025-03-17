@@ -21,11 +21,13 @@ class ProjectCreated implements ShouldBroadcast
 
     public Project $project;
     public User $user;
+    public string $actionType;
 
-    public function __construct(Project $project, User $user)
+    public function __construct(Project $project, User $user, string $actionType)
     {
         $this->project = $project;
         $this->user = $user;
+        $this->actionType = $actionType;
     }
 
     public function broadcastOn(): array
@@ -53,7 +55,8 @@ class ProjectCreated implements ShouldBroadcast
             "end_date" => $this->project->end_date,
             "managed_by" =>new UserResource($this->project->managedBy),
             "created_by" => new UserResource($this->project->createdBy),
-            "tasks" => TaskResource::collection($this->project->tasks)
+            "tasks" => TaskResource::collection($this->project->tasks),
+            'actionType' => $this->actionType
         ];
     }
 }

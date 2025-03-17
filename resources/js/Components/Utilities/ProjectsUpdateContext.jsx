@@ -13,8 +13,12 @@ export const ProjectUpdateProvider = ({ children, auth }) => {
         window.Echo.private(`projects.${auth.user.id}`).listen(
             "ProjectCreated",
             (event) => {
+                const message =
+                    event.actionType === "created"
+                        ? "New Project Added"
+                        : "Project Updated";
                 setNotifications((prev) => [...prev, event]);
-                toast.info("New Project Added", {
+                toast.info(message, {
                     action: {
                         label: "View Project",
                         onClick: () => {

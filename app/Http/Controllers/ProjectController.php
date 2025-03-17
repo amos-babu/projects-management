@@ -60,7 +60,7 @@ class ProjectController extends Controller
 
         $project = Project::create($data);
 
-        broadcast(new ProjectCreated($project, Auth::user()))->toOthers();
+        broadcast(new ProjectCreated($project, Auth::user(), 'updated'))->toOthers();
 
         return to_route('projects.index')
                 ->with('success', 'Project Created Successfully!');
@@ -98,6 +98,7 @@ class ProjectController extends Controller
         $data = $request->validated();
         $data['manager_assigned_id'] = (int)$request->manager_assigned_id;
         $project->update($data);
+        broadcast(new ProjectCreated($project, Auth::user(), 'updated'))->toOthers();
         return to_route('projects.index')
                 ->with('success', 'Project Updated Successfully!');
     }
