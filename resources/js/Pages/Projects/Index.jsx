@@ -40,6 +40,7 @@ export default function Index({ projects, canCreatePolicy, authUserId }) {
             "ProjectCreated",
             (event) => {
                 toast.success("New Project Added");
+                console.log(event);
             }
         );
 

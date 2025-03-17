@@ -60,7 +60,7 @@ class ProjectController extends Controller
 
         $project = Project::create($data);
 
-        event(new ProjectCreated($project));
+        broadcast(new ProjectCreated($project, Auth::user()))->toOthers();
 
         return to_route('projects.index')
                 ->with('success', 'Project Created Successfully!');

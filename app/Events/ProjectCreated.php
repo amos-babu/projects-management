@@ -2,8 +2,10 @@
 
 namespace App\Events;
 
+use App\Http\Resources\TaskResource;
 use App\Http\Resources\UserResource;
 use App\Models\Project;
+use App\Models\User;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -18,26 +20,40 @@ class ProjectCreated implements ShouldBroadcast
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public Project $project;
+    public User $user;
 
-    public function __construct(Project $project)
+    public function __construct(Project $project, User $user)
     {
         $this->project = $project;
+        $this->user = $user;
     }
 
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('projects.' .$this->project->user_id),
+            new PrivateChannel('projects.' .$this->project->managedBy->id),
         ];
     }
 
     public function broadcastWith()
     {
         return [
-            'id' => $this->project->id,
-            'name' => $this->project->name,
-            'status' => $this->project->status->label(),
-            'managed_by' =>new UserResource($this->project->managedBy),
+           "id" => $this->project->id,
+            "name" => $this->project->name,
+            "description" => $this->project->description,
+            "status" => [
+                'label' => $this->project->status->label(),
+                'value' => $this->project->status->value
+                ],
+            "permissions" => [
+                "canUpdate" => $this->user?->can('update', $this->project->resource),
+                "canDelete" => $this->user?->can('delete', $this->project->resource)
+            ],
+            "start_date" => $this->project->start_date,
+            "end_date" => $this->project->end_date,
+            "managed_by" =>new UserResource($this->project->managedBy),
+            "created_by" => new UserResource($this->project->createdBy),
+            "tasks" => TaskResource::collection($this->project->tasks)
         ];
     }
 }
