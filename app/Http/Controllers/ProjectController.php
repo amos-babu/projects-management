@@ -63,7 +63,7 @@ class ProjectController extends Controller
         $project = Project::create($data);
         $project->refresh();
 
-        broadcast(new ProjectCreated($project, Auth::user(), 'updated'))->toOthers();
+        broadcast(new ProjectCreated($project, Auth::user(), 'created'))->toOthers();
 
         Notification::create([
             'user_id' => $project->manager_assigned_id,

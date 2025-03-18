@@ -1,13 +1,21 @@
-import { router } from "@inertiajs/react";
+import { router, usePage } from "@inertiajs/react";
 import { toast } from "sonner";
 
 import { createContext, useContext, useEffect, useState } from "react";
 
 const ProjectUpdateContext = createContext();
-export const useProjectUpdate = () => useContext(ProjectUpdateContext);
 
-export const ProjectUpdateProvider = ({ children, auth }) => {
-    const [notifications, setNotifications] = useState([]);
+export const ProjectUpdateProvider = ({
+    children,
+    auth,
+    notifications: initialNotifications,
+}) => {
+    const [notifications, setNotifications] = useState(
+        initialNotifications || []
+    );
+    useEffect(() => {
+        setNotifications(initialNotifications);
+    }, [initialNotifications]);
     useEffect(() => {
         if (!auth.user || !auth.user.id) return;
         window.Echo.private(`projects.${auth.user.id}`).listen(
@@ -19,7 +27,7 @@ export const ProjectUpdateProvider = ({ children, auth }) => {
                         : event.actionType === "updated"
                         ? "Project Updated"
                         : "Project Deleted";
-                setNotifications((prev) => [...prev, event]);
+                // setNotifications((prev) => [...prev, event]);
                 toast.info(message, {
                     action:
                         event.actionType !== "deleted"
@@ -33,7 +41,6 @@ export const ProjectUpdateProvider = ({ children, auth }) => {
                               }
                             : undefined,
                 });
-                console.log(event);
             }
         );
 
@@ -47,4 +54,15 @@ export const ProjectUpdateProvider = ({ children, auth }) => {
             {children}
         </ProjectUpdateContext.Provider>
     );
+};
+
+export const useProjectUpdate = () => {
+    const context = useContext(ProjectUpdateContext);
+
+    if (!context) {
+        throw new Error(
+            "useNotifications must be used within a NotificationProvider"
+        );
+    }
+    return context;
 };

@@ -18,9 +18,10 @@ createInertiaApp({
     setup({ el, App, props }) {
         const root = createRoot(el);
         const { auth } = props.initialPage.props;
+        const { notifications } = props.initialPage.props;
 
         root.render(
-            <ProjectUpdateProvider auth={auth}>
+            <ProjectUpdateProvider auth={auth} notifications={notifications}>
                 <App {...props} />
             </ProjectUpdateProvider>
         );
