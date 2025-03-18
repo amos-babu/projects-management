@@ -14,6 +14,7 @@ use App\Models\User;
 use App\Actions\DisplayProjectsAction;
 use App\Events\ProjectCreated;
 use App\Events\ProjectDeleted;
+use App\Models\Notification;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -33,7 +34,7 @@ class ProjectController extends Controller
         return Inertia::render('Projects/Index', [
             'projects' => ProjectResource::collection($projects),
             'canCreatePolicy' => Auth::user()?->can('create', Project::class),
-            'authUserId' => auth()->id()
+            'authUserId' => Auth::id()
         ]);
     }
 
@@ -60,8 +61,16 @@ class ProjectController extends Controller
         $data['manager_assigned_id'] = (int)$request->manager_assigned_id;
 
         $project = Project::create($data);
+        $project->refresh();
 
         broadcast(new ProjectCreated($project, Auth::user(), 'updated'))->toOthers();
+
+        Notification::create([
+            'user_id' => $project->manager_assigned_id,
+            'project_id' => $project->id,
+            'type' => 'created',
+            'is_read' => false
+        ]);
 
         return to_route('projects.index')
                 ->with('success', 'Project Created Successfully!');

@@ -9,7 +9,7 @@ export const useProjectUpdate = () => useContext(ProjectUpdateContext);
 export const ProjectUpdateProvider = ({ children, auth }) => {
     const [notifications, setNotifications] = useState([]);
     useEffect(() => {
-        if (!auth.user.id) return;
+        if (!auth.user || !auth.user.id) return;
         window.Echo.private(`projects.${auth.user.id}`).listen(
             "ProjectCreated",
             (event) => {

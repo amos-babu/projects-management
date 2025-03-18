@@ -1,6 +1,7 @@
 import ApplicationLogo from "@/Components/ApplicationLogo";
 import Dropdown from "@/Components/Dropdown";
 import NavLink from "@/Components/NavLink";
+import Notifications from "@/Components/Notifications";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink";
 import { Link, usePage } from "@inertiajs/react";
 import { useState } from "react";
@@ -40,9 +41,17 @@ export default function AuthenticatedLayout({ header, children }) {
                                 >
                                     Projects
                                 </NavLink>
+
+                                <Notifications />
+
+                                <NavLink
+                                    href={route("projects.index")}
+                                    active={route().current("projects.index")}
+                                >
+                                    Notifications
+                                </NavLink>
                             </div>
                         </div>
-
                         <div className="hidden sm:ms-6 sm:flex sm:items-center">
                             <div className="relative ms-3">
                                 <Dropdown>
