@@ -81,7 +81,7 @@ export default function Index({ projects, canCreatePolicy, authUserId }) {
                     <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg">
                         <div className="p-6 text-gray-900">
                             {projects.data.length === 0 ? (
-                                <p className="font-sans font-semibold text-center">
+                                <p className="font-sans font-semibold text-center text-gray-500">
                                     No Projects Assigned
                                 </p>
                             ) : (

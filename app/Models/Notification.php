@@ -23,6 +23,11 @@ class Notification extends Model
         return "Project '{$this->project->name}' was {$this->type}.";
     }
 
+    public function scopeForUser($query, $userId)
+    {
+        return $query->where('user_id', $userId);
+    }
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

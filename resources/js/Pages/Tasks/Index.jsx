@@ -41,7 +41,7 @@ export default function Index({ tasks }) {
                                     task.status.label === "To do"
                                         ? "bg-red-600"
                                         : task.status.label === "In Progress"
-                                        ? "bg-yellow-500"
+                                        ? "bg-yellow-600"
                                         : task.status.label === "Completed"
                                         ? "bg-green-600"
                                         : ""

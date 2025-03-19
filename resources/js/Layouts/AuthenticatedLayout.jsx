@@ -11,8 +11,6 @@ export default function AuthenticatedLayout({ header, children }) {
     const user = usePage().props.auth.user;
     const { notifications } = useProjectUpdate();
 
-    // console.log(notifications);
-
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
         useState(false);
 
@@ -46,14 +44,7 @@ export default function AuthenticatedLayout({ header, children }) {
                                     Projects
                                 </NavLink>
 
-                                <Notifications />
-
-                                <NavLink
-                                    href={route("projects.index")}
-                                    active={route().current("projects.index")}
-                                >
-                                    Notifications
-                                </NavLink>
+                                <Notifications notifications = {notifications} />
                             </div>
                         </div>
                         <div className="hidden sm:ms-6 sm:flex sm:items-center">

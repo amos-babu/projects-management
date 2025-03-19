@@ -19,17 +19,17 @@ export default function Dashboard({ statusCount }) {
             <Head title="Dashboard" />
 
             <div className="py-12">
-                <div className="flex flex-wrap justify-center gap-10 mx-auto max-w-7xl sm:px-6 lg:px-8">
+                <div className="grid flex-wrap justify-center grid-cols-3 gap-3 mx-auto max-w-7xl sm:px-6 lg:px-8">
                     {Object.entries(statusCount).map(([status, count]) => (
                         <Card
                             key={status}
-                            className={`w-1/4 h-40 grow ${
+                            className={`h-40 ${
                                 status === "Pending"
-                                    ? "bg-red-500"
+                                    ? "bg-red-600"
                                     : status === "In Progress"
-                                    ? "bg-yellow-500"
+                                    ? "bg-yellow-600"
                                     : status === "Completed"
-                                    ? "bg-green-500"
+                                    ? "bg-green-600"
                                     : ""
                             }`}
                         >

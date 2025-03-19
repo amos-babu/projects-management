@@ -17,25 +17,12 @@ import { cn } from "@/lib/utils";
 import { Switch } from "@headlessui/react";
 import { BellRing, Check } from "lucide-react";
 
-export default function Notifications() {
-    const notifications = [
-        {
-            title: "Your call has been confirmed.",
-            description: "1 hour ago",
-        },
-        {
-            title: "You have a new message!",
-            description: "1 hour ago",
-        },
-        {
-            title: "Your subscription is expiring soon!",
-            description: "2 hours ago",
-        },
-    ];
+export default function Notifications({ notifications }) {
+    console.log(notifications);
     return (
         <DropdownMenu>
             <DropdownMenuTrigger>
-                <BellRing />
+                <BellRing className="w-5 h-5 text-gray-500" />
             </DropdownMenuTrigger>
             <DropdownMenuContent>
                 <div className={cn("w-[380px]")}>
@@ -59,18 +46,23 @@ export default function Notifications() {
                             <Switch />
                         </div>
                         <div>
-                            {notifications.map((notification, index) => (
+                            {notifications.map((notification) => (
                                 <div
-                                    key={index}
+                                    key={notification.id}
                                     className="mb-4 grid grid-cols-[25px_1fr] items-start pb-4 last:mb-0 last:pb-0"
                                 >
                                     <span className="flex w-2 h-2 translate-y-1 rounded-full bg-sky-500" />
+                                    {/* {notification.is_read === 0 ? (
+                                        <span className="flex w-2 h-2 translate-y-1 rounded-full bg-sky-500" />
+                                    ) : (
+                                        <span className="flex w-2 h-2 text-gray-500 translate-y-1 rounded-full" />
+                                    )} */}
                                     <div className="space-y-1">
                                         <p className="text-sm font-medium leading-none">
-                                            {notification.title}
+                                            {notification.message}
                                         </p>
                                         <p className="text-sm text-muted-foreground">
-                                            {notification.description}
+                                            {notification.created_at}
                                         </p>
                                     </div>
                                 </div>

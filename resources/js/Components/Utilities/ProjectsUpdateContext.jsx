@@ -24,22 +24,15 @@ export const ProjectUpdateProvider = ({
                 const message =
                     event.actionType === "created"
                         ? "New Project Added"
-                        : event.actionType === "updated"
-                        ? "Project Updated"
-                        : "Project Deleted";
+                        : "Project Updated";
                 // setNotifications((prev) => [...prev, event]);
                 toast.info(message, {
-                    action:
-                        event.actionType !== "deleted"
-                            ? {
-                                  label: "View Project",
-                                  onClick: () => {
-                                      router.visit(
-                                          route("projects.show", event.id)
-                                      );
-                                  },
-                              }
-                            : undefined,
+                    action: {
+                        label: "View Project",
+                        onClick: () => {
+                            router.visit(route("projects.show", event.id));
+                        },
+                    },
                 });
             }
         );
