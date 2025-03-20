@@ -63,14 +63,15 @@ class ProjectController extends Controller
         $project = Project::create($data);
         $project->refresh();
 
-        broadcast(new ProjectCreated($project, Auth::user(), 'created'))->toOthers();
-
-        Notification::create([
+        $notification = Notification::create([
             'user_id' => $project->manager_assigned_id,
             'project_id' => $project->id,
             'type' => 'created',
             'is_read' => false
         ]);
+
+        broadcast(new ProjectCreated($project, $notification, Auth::user(),  'created'))
+            ->toOthers();
 
         return to_route('projects.index')
                 ->with('success', 'Project Created Successfully!');

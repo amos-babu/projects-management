@@ -2,8 +2,10 @@
 
 namespace App\Events;
 
+use App\Http\Resources\NotificationResource;
 use App\Http\Resources\TaskResource;
 use App\Http\Resources\UserResource;
+use App\Models\Notification;
 use App\Models\Project;
 use App\Models\User;
 use Illuminate\Broadcasting\Channel;
@@ -20,12 +22,14 @@ class ProjectCreated implements ShouldBroadcast
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public Project $project;
+    public Notification $notification;
     public User $user;
     public string $actionType;
 
-    public function __construct(Project $project, User $user, string $actionType)
+    public function __construct(Project $project, Notification $notification, User $user, string $actionType)
     {
         $this->project = $project;
+        $this->notification = $notification;
         $this->user = $user;
         $this->actionType = $actionType;
     }
@@ -56,7 +60,8 @@ class ProjectCreated implements ShouldBroadcast
             "managed_by" =>new UserResource($this->project->managedBy),
             "created_by" => new UserResource($this->project->createdBy),
             "tasks" => TaskResource::collection($this->project->tasks),
-            'actionType' => $this->actionType
+            "actionType" => $this->actionType,
+            "notification" => new NotificationResource($this->notification)
         ];
     }
 }

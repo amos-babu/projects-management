@@ -24,8 +24,6 @@ export default function Create({ managers, statusOptions }) {
         manager_assigned_id: 0,
     });
 
-    // console.log(managers.data);
-
     const submitProject = (e) => {
         e.preventDefault();
         post(route("projects.store"));

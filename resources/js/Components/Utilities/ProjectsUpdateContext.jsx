@@ -1,4 +1,4 @@
-import { router, usePage } from "@inertiajs/react";
+import { router } from "@inertiajs/react";
 import { toast } from "sonner";
 
 import { createContext, useContext, useEffect, useState } from "react";
@@ -10,12 +10,14 @@ export const ProjectUpdateProvider = ({
     auth,
     notifications: initialNotifications,
 }) => {
+    console.log(initialNotifications);
     const [notifications, setNotifications] = useState(
         initialNotifications || []
     );
     useEffect(() => {
         setNotifications(initialNotifications);
     }, [initialNotifications]);
+
     useEffect(() => {
         if (!auth.user || !auth.user.id) return;
         window.Echo.private(`projects.${auth.user.id}`).listen(
@@ -25,7 +27,12 @@ export const ProjectUpdateProvider = ({
                     event.actionType === "created"
                         ? "New Project Added"
                         : "Project Updated";
-                // setNotifications((prev) => [...prev, event]);
+                setNotifications((prev) => {
+                    if (prev.some((n) => n.id === event.notification)) {
+                        return prev;
+                    }
+                    [...prev, event.notification];
+                });
                 toast.info(message, {
                     action: {
                         label: "View Project",
@@ -34,13 +41,15 @@ export const ProjectUpdateProvider = ({
                         },
                     },
                 });
+
+                console.log(event);
             }
         );
 
         return () => {
             window.Echo.leaveChannel(`projects.${auth.user.id}`);
         };
-    }, []);
+    }, [auth.user.id]);
 
     return (
         <ProjectUpdateContext.Provider value={{ notifications }}>
