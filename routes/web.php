@@ -26,7 +26,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::put('/tasks/{task}', [TaskController::class, 'update'])->name('tasks.update');
     Route::delete('/tasks/{task}', [TaskController::class, 'destroy'])->name('tasks.destroy');
 
-    Route::put('/notification/{id}/read', [NotificationController::class, 'markAsRead'])->name('notification.update');
+    Route::put('/notification/{id}/read', [NotificationController::class, 'markAsRead'])
+            ->name('notification.update');
+    Route::put('/notification/mark-all-as-read', [NotificationController::class, 'markAllAsRead'])
+            ->name('notification.markAllAsRead');
 });
 
 

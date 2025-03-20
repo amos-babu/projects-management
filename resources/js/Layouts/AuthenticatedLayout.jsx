@@ -3,13 +3,11 @@ import Dropdown from "@/Components/Dropdown";
 import NavLink from "@/Components/NavLink";
 import Notifications from "@/Components/Notifications";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink";
-import { useProjectUpdate } from "@/Components/Utilities/ProjectsUpdateContext";
 import { Link, usePage } from "@inertiajs/react";
 import { useState } from "react";
 
 export default function AuthenticatedLayout({ header, children }) {
     const user = usePage().props.auth.user;
-    const { notifications } = useProjectUpdate();
 
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
         useState(false);
@@ -44,7 +42,7 @@ export default function AuthenticatedLayout({ header, children }) {
                                     Projects
                                 </NavLink>
 
-                                <Notifications notifications = {notifications} />
+                                <Notifications />
                             </div>
                         </div>
                         <div className="hidden sm:ms-6 sm:flex sm:items-center">

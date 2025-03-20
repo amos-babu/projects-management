@@ -1,7 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "@/Components/ui/button";
 import {
-    Card,
     CardContent,
     CardDescription,
     CardFooter,
@@ -17,15 +16,33 @@ import { cn } from "@/lib/utils";
 import { Switch } from "@headlessui/react";
 import { BellRing, Check } from "lucide-react";
 import { useForm } from "@inertiajs/react";
+import { useProjectUpdate } from "./Utilities/ProjectsUpdateContext";
 
-export default function Notifications({ notifications }) {
+export default function Notifications() {
+    const { notifications } = useProjectUpdate();
+    const [notifList, setNotifList] = useState(notifications);
     const { data, put } = useForm({
         is_read: true,
     });
 
-    const markAsRead = (e, id) => {
-        put(route("notification.update", id));
-        console.log(data);
+    const markAsRead = (id) => {
+        setNotifList((prev) =>
+            prev.map((notif) =>
+                notif.id === id ? { ...notif, is_read: true } : notif
+            )
+        );
+        put(route("notification.update", id), {
+            preserveScroll: true,
+        });
+    };
+
+    const markAllAsRead = () => {
+        setNotifList((prev) =>
+            prev.map((notif) => ({ ...notif, is_read: true }))
+        );
+        put(route("notification.markAllAsRead"), {
+            preserveScroll: true,
+        });
     };
 
     return (
@@ -55,7 +72,7 @@ export default function Notifications({ notifications }) {
                             <Switch />
                         </div>
                         <div>
-                            {notifications.map((notification) => (
+                            {notifList.map((notification) => (
                                 <div
                                     onClick={(e) => markAsRead(notification.id)}
                                     key={notification.id}
@@ -77,10 +94,8 @@ export default function Notifications({ notifications }) {
                                             {notification.message}
                                         </p>
                                         <p
-                                            className={`text-sm  ${
-                                                notification === 0
-                                                    ? "text-muted-foreground"
-                                                    : ""
+                                            className={`text-sm text-muted-foreground  ${
+                                                notification === 0 ? "" : ""
                                             }`}
                                         >
                                             {notification.created_at}
@@ -91,7 +106,7 @@ export default function Notifications({ notifications }) {
                         </div>
                     </CardContent>
                     <CardFooter>
-                        <Button className="w-full">
+                        <Button onClick={markAllAsRead} className="w-full">
                             <Check /> Mark all as read
                         </Button>
                     </CardFooter>
