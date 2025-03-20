@@ -31,7 +31,7 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
-        $notifications = Notification::forUser(Auth::id())->with('project')->get();
+        $notifications = Notification::forUser(Auth::id())->latest()->get();
         $notifications = $notifications->map(function($notification) {
             return [
                 'id' => $notification->id,

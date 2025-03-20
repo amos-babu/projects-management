@@ -9,9 +9,14 @@ use Inertia\Inertia;
 
 class NotificationController extends Controller
 {
-    public function getAllNotifications()
+    public function markAsRead(Request $request, $id)
     {
-        $notifications = Notification::where('user_id', Auth::id())->get();
-        // return Inertia::render('Layouts/AuthenticatedLayout')
+        $request->validate([
+            'is_read' => ['required','boolean'],
+        ]);
+
+        $notification = Notification::findOrFail($id);
+
+        $notification->update($request->only('is_read'));
     }
 }

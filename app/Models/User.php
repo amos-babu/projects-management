@@ -60,6 +60,6 @@ class User extends Authenticatable
 
     public function notifications(): HasMany
     {
-        return $this->hasMany(Notification::class, 'foreign_key', 'local_key');
+        return $this->hasMany(Notification::class);
     }
 }
