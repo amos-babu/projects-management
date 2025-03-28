@@ -10,7 +10,6 @@ export const ProjectUpdateProvider = ({
     auth,
     notifications: initialNotifications,
 }) => {
-    console.log(initialNotifications);
     const [notifications, setNotifications] = useState(
         initialNotifications || []
     );
@@ -19,7 +18,7 @@ export const ProjectUpdateProvider = ({
     }, [initialNotifications]);
 
     useEffect(() => {
-        if (!auth.user || !auth.user.id) return;
+        if (!auth?.user?.id) return;
         window.Echo.private(`projects.${auth.user.id}`).listen(
             "ProjectCreated",
             (event) => {
@@ -49,7 +48,7 @@ export const ProjectUpdateProvider = ({
         return () => {
             window.Echo.leaveChannel(`projects.${auth.user.id}`);
         };
-    }, [auth.user.id]);
+    }, [auth?.user?.id]);
 
     return (
         <ProjectUpdateContext.Provider value={{ notifications }}>
