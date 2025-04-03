@@ -9,6 +9,7 @@ export const ProjectUpdateProvider = ({
     children,
     auth,
     notifications: initialNotifications,
+    notificationCount,
 }) => {
     const [notifications, setNotifications] = useState(
         initialNotifications || []
@@ -51,7 +52,9 @@ export const ProjectUpdateProvider = ({
     }, [auth?.user?.id]);
 
     return (
-        <ProjectUpdateContext.Provider value={{ notifications }}>
+        <ProjectUpdateContext.Provider
+            value={{ notifications, notificationCount }}
+        >
             {children}
         </ProjectUpdateContext.Provider>
     );

@@ -13,7 +13,7 @@ export default function GuestLayout({ children, message }) {
                 </Link>
             </div>
             <div>
-                <p className="text-xl text-gray-500">{message}</p>
+                <p className="text-lg text-gray-600">{message}</p>
             </div>
 
             <div className="w-full px-6 py-4 mt-6 overflow-hidden bg-white shadow-md sm:max-w-md sm:rounded-lg">

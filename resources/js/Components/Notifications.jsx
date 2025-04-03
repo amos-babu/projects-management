@@ -15,15 +15,17 @@ import {
 import { cn } from "@/lib/utils";
 import { Switch } from "@headlessui/react";
 import { BellRing, Check } from "lucide-react";
-import { useForm } from "@inertiajs/react";
+import { useForm, usePage } from "@inertiajs/react";
 import { useProjectUpdate } from "./Utilities/ProjectsUpdateContext";
 
 export default function Notifications() {
-    const { notifications } = useProjectUpdate();
+    const { notifications, notificationCount } = useProjectUpdate();
     const [notifList, setNotifList] = useState(notifications);
     const { data, put } = useForm({
         is_read: true,
     });
+
+    console.log(notificationCount);
 
     const markAsRead = (id) => {
         setNotifList((prev) =>
@@ -55,7 +57,7 @@ export default function Notifications() {
                     <CardHeader>
                         <CardTitle>Notifications</CardTitle>
                         <CardDescription>
-                            You have 3 unread messages.
+                            You have {notificationCount} unread messages.
                         </CardDescription>
                     </CardHeader>
                     <CardContent className="grid gap-4">

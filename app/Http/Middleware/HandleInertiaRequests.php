@@ -32,6 +32,7 @@ class HandleInertiaRequests extends Middleware
     public function share(Request $request): array
     {
         $notifications = Notification::forUser(Auth::id())->latest()->get();
+        $notificationsCount = Notification::forUser(Auth::id())->where('is_read', false)->count();
         $notifications = $notifications->map(function($notification) {
             return [
                 'id' => $notification->id,
@@ -55,6 +56,10 @@ class HandleInertiaRequests extends Middleware
             'notifications' => Auth::check()
                 ? $notifications
                 : [],
+
+            'notificationCount' => Auth::check()
+                ? $notificationsCount
+                : null,
 
         ];
     }
