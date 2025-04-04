@@ -35,29 +35,29 @@ export default function Index({ projects, canCreatePolicy, authUserId }) {
         setSuccessMessage(flash.success);
     }, [flash.success]);
 
-    useEffect(() => {
-        if (!authUserId) {
-            return;
-        }
-        window.Echo.private(`projects.${authUserId}`).listen(
-            "ProjectCreated",
-            (event) => {
-                toast.info("New Project Added", {
-                    action: {
-                        label: "View Project",
-                        onClick: () => {
-                            router.visit(route("projects.show", event.id));
-                        },
-                    },
-                });
-                console.log(event.id);
-            }
-        );
+    // useEffect(() => {
+    //     if (!authUserId) {
+    //         return;
+    //     }
+    //     window.Echo.private(`projects.${authUserId}`).listen(
+    //         "ProjectCreated",
+    //         (event) => {
+    //             toast.info("New Project Added", {
+    //                 action: {
+    //                     label: "View Project",
+    //                     onClick: () => {
+    //                         router.visit(route("projects.show", event.id));
+    //                     },
+    //                 },
+    //             });
+    //             console.log(event.id);
+    //         }
+    //     );
 
-        return () => {
-            window.Echo.leaveChannel(`projects.${authUserId}`);
-        };
-    }, []);
+    //     return () => {
+    //         window.Echo.leaveChannel(`projects.${authUserId}`);
+    //     };
+    // }, []);
 
     return (
         <AuthenticatedLayout

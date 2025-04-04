@@ -27,12 +27,12 @@ export const ProjectUpdateProvider = ({
                     event.actionType === "created"
                         ? "New Project Added"
                         : "Project Updated";
-                setNotifications((prev) => {
-                    if (prev.some((n) => n.id === event.notification)) {
-                        return prev;
-                    }
-                    [...prev, event.notification];
-                });
+                // setNotifications((prev) => {
+                //     if (prev.some((n) => n.id === event.notification)) {
+                //         return prev;
+                //     }
+                //     [...prev, event.notification];
+                // });
                 toast.info(message, {
                     action: {
                         label: "View Project",

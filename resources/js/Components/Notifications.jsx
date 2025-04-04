@@ -15,23 +15,33 @@ import {
 import { cn } from "@/lib/utils";
 import { Switch } from "@headlessui/react";
 import { BellRing, Check } from "lucide-react";
-import { useForm, usePage } from "@inertiajs/react";
+import { useForm } from "@inertiajs/react";
 import { useProjectUpdate } from "./Utilities/ProjectsUpdateContext";
 
 export default function Notifications() {
     const { notifications, notificationCount } = useProjectUpdate();
-    const [notifList, setNotifList] = useState(notifications);
+    const [readUnreadNotifications, setReadUnreadNotifications] =
+        useState(notifications);
+    const [readNotificationCount, setReadNotificationCount] =
+        useState(notificationCount);
     const { data, put } = useForm({
         is_read: true,
     });
 
-    console.log(notificationCount);
+    const unreadNotifications = readUnreadNotifications.filter(
+        (notification) => notification.is_read == false
+    );
 
     const markAsRead = (id) => {
-        setNotifList((prev) =>
+        setReadUnreadNotifications((prev) =>
             prev.map((notif) =>
                 notif.id === id ? { ...notif, is_read: true } : notif
             )
+        );
+        setReadNotificationCount(
+            readNotificationCount > 0
+                ? readNotificationCount - 1
+                : readNotificationCount
         );
         put(route("notification.update", id), {
             preserveScroll: true,
@@ -39,9 +49,11 @@ export default function Notifications() {
     };
 
     const markAllAsRead = () => {
-        setNotifList((prev) =>
+        setReadUnreadNotifications((prev) =>
             prev.map((notif) => ({ ...notif, is_read: true }))
         );
+
+        setReadNotificationCount(readNotificationCount > 0 ? 0 : 0);
         put(route("notification.markAllAsRead"), {
             preserveScroll: true,
         });
@@ -57,7 +69,7 @@ export default function Notifications() {
                     <CardHeader>
                         <CardTitle>Notifications</CardTitle>
                         <CardDescription>
-                            You have {notificationCount} unread messages.
+                            You have {readNotificationCount} unread messages.
                         </CardDescription>
                     </CardHeader>
                     <CardContent className="grid gap-4">
@@ -74,31 +86,21 @@ export default function Notifications() {
                             <Switch />
                         </div>
                         <div>
-                            {notifList.map((notification) => (
+                            {unreadNotifications.map((notification) => (
                                 <div
                                     onClick={(e) => markAsRead(notification.id)}
                                     key={notification.id}
                                     className="mb-4 grid cursor-pointer grid-cols-[25px_1fr] items-start pb-4 last:mb-0 last:pb-0"
                                 >
-                                    {notification.is_read === 0 ? (
-                                        <span className="flex w-2 h-2 translate-y-1 rounded-full bg-sky-500" />
-                                    ) : (
-                                        <span className="flex w-2 h-2 text-gray-500 translate-y-1 rounded-full" />
-                                    )}
+                                    <span className="flex w-2 h-2 translate-y-1 rounded-full bg-sky-500" />
                                     <div className="flex justify-between">
                                         <p
-                                            className={`text-sm font-medium leading-none ${
-                                                notification.is_read === 0
-                                                    ? ""
-                                                    : "text-gray-500"
-                                            }`}
+                                            className={`text-sm font-medium leading-none`}
                                         >
                                             {notification.message}
                                         </p>
                                         <p
-                                            className={`text-sm text-muted-foreground  ${
-                                                notification === 0 ? "" : ""
-                                            }`}
+                                            className={`text-sm text-muted-foreground`}
                                         >
                                             {notification.created_at}
                                         </p>

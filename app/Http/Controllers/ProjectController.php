@@ -107,9 +107,17 @@ class ProjectController extends Controller
     {
         $this->authorize('update', $project);
         $data = $request->validated();
-        $data['manager_assigned_id'] = (int)$request->manager_assigned_id;
+        $data['manager_assigned_id'] = $request->manager_assigned_id;
         $project->update($data);
-        broadcast(new ProjectCreated($project, Auth::user(), 'updated'))->toOthers();
+
+        $notification = Notification::create([
+            'user_id' => $project->manager_assigned_id,
+            'project_id' => $project->id,
+            'type' => 'updated',
+            'is_read' => false
+        ]);
+
+        broadcast(new ProjectCreated($project, $notification, Auth::user(), 'updated'))->toOthers();
         return to_route('projects.index')
                 ->with('success', 'Project Updated Successfully!');
     }
