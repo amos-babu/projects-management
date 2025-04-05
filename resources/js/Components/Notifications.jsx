@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@/Components/ui/button";
 import {
     CardContent,
@@ -13,7 +13,6 @@ import {
     DropdownMenuTrigger,
 } from "@/Components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
-import { Switch } from "@headlessui/react";
 import { BellRing, Check } from "lucide-react";
 import { useForm } from "@inertiajs/react";
 import { useProjectUpdate } from "./Utilities/ProjectsUpdateContext";
@@ -27,6 +26,16 @@ export default function Notifications() {
     const { data, put } = useForm({
         is_read: true,
     });
+
+    useEffect(() => {
+        setReadUnreadNotifications(notifications);
+        console.log("Set Notifications", notifications);
+    }, [notifications]);
+
+    useEffect(() => {
+        setReadNotificationCount(notificationCount);
+        console.log("Set NotificationsCount", notificationCount);
+    }, [notificationCount]);
 
     const unreadNotifications = readUnreadNotifications.filter(
         (notification) => notification.is_read == false
@@ -73,18 +82,6 @@ export default function Notifications() {
                         </CardDescription>
                     </CardHeader>
                     <CardContent className="grid gap-4">
-                        <div className="flex items-center p-4 space-x-4 border rounded-md ">
-                            <BellRing />
-                            <div className="flex-1 space-y-1">
-                                <p className="text-sm font-medium leading-none">
-                                    Push Notifications
-                                </p>
-                                <p className="text-sm text-muted-foreground">
-                                    Send notifications to device.
-                                </p>
-                            </div>
-                            <Switch />
-                        </div>
                         <div>
                             {unreadNotifications.map((notification) => (
                                 <div

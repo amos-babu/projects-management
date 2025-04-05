@@ -14,9 +14,6 @@ export const ProjectUpdateProvider = ({
     const [notifications, setNotifications] = useState(
         initialNotifications || []
     );
-    useEffect(() => {
-        setNotifications(initialNotifications);
-    }, [initialNotifications]);
 
     useEffect(() => {
         if (!auth?.user?.id) return;
@@ -27,12 +24,18 @@ export const ProjectUpdateProvider = ({
                     event.actionType === "created"
                         ? "New Project Added"
                         : "Project Updated";
-                // setNotifications((prev) => {
-                //     if (prev.some((n) => n.id === event.notification)) {
-                //         return prev;
-                //     }
-                //     [...prev, event.notification];
-                // });
+                setNotifications((prev) => {
+                    if (
+                        prev.some(
+                            (n) =>
+                                Number(n.id) === Number(event.notification.id)
+                        )
+                    ) {
+                        return prev;
+                    }
+                    console.log([...prev, event.notification]);
+                    return [...prev, event.notification];
+                });
                 toast.info(message, {
                     action: {
                         label: "View Project",
@@ -41,8 +44,6 @@ export const ProjectUpdateProvider = ({
                         },
                     },
                 });
-
-                console.log(event);
             }
         );
 
@@ -65,7 +66,7 @@ export const useProjectUpdate = () => {
 
     if (!context) {
         throw new Error(
-            "useNotifications must be used within a NotificationProvider"
+            "useProjectUpdate must be used within a ProjectUpdateProvider"
         );
     }
     return context;
