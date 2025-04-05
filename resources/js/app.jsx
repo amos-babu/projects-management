@@ -1,7 +1,7 @@
 import "../css/app.css";
 import "./bootstrap";
 
-import { createInertiaApp, usePage } from "@inertiajs/react";
+import { createInertiaApp } from "@inertiajs/react";
 import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
 import { createRoot } from "react-dom/client";
 import { ProjectUpdateProvider } from "./Components/Utilities/ProjectsUpdateContext";
@@ -22,7 +22,11 @@ createInertiaApp({
         const { notificationCount } = props.initialPage.props;
 
         root.render(
-            <ProjectUpdateProvider auth={auth} notificationCount={notificationCount} notifications={notifications}>
+            <ProjectUpdateProvider
+                auth={auth}
+                notificationCount={notificationCount}
+                notifications={notifications}
+            >
                 <App {...props} />
             </ProjectUpdateProvider>
         );
