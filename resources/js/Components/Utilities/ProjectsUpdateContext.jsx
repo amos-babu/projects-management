@@ -18,7 +18,7 @@ export const ProjectUpdateProvider = ({
     useEffect(() => {
         if (!auth?.user?.id) return;
         window.Echo.private(`projects.${auth.user.id}`).listen(
-            "ProjectCreated",
+            "ProjectCreatedOrUpdated",
             (event) => {
                 const message =
                     event.actionType === "created"
@@ -33,7 +33,6 @@ export const ProjectUpdateProvider = ({
                     ) {
                         return prev;
                     }
-                    console.log([...prev, event.notification]);
                     return [...prev, event.notification];
                 });
                 toast.info(message, {
@@ -49,6 +48,49 @@ export const ProjectUpdateProvider = ({
 
         return () => {
             window.Echo.leaveChannel(`projects.${auth.user.id}`);
+        };
+    }, [auth?.user?.id]);
+
+    useEffect(() => {
+        if (!auth?.user?.id) return;
+
+        window.Echo.private(`project_delete.${auth.user.id}`).listen(
+            "ProjectDeleted",
+            (event) => {
+                const message = "Project Deleted Successfully";
+                toast.success(message);
+            }
+        );
+
+        return () => {
+            window.Echo.leaveChannel(`project_delete.${auth.user.id}`);
+        };
+    }, [auth?.user?.id]);
+
+    useEffect(() => {
+        if (!auth?.user?.id) return;
+
+        window.Echo.private(`task.${auth.user.id}`).listen(
+            "TaskCreatedOrUpdated",
+            (event) => {
+                const message =
+                    event.actionType === "created"
+                        ? "New Project Added"
+                        : "Project Updated";
+
+                toast.info(message, {
+                    action: {
+                        label: "View Project",
+                        onClick: () => {
+                            router.visit(route("tasks.show", event.id));
+                        },
+                    },
+                });
+            }
+        );
+
+        return () => {
+            window.Echo.leaveChannel(`task.${auth.user.id}`);
         };
     }, [auth?.user?.id]);
 

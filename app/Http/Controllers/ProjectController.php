@@ -12,7 +12,7 @@ use App\Http\Resources\UserResource;
 use App\Models\Task;
 use App\Models\User;
 use App\Actions\DisplayProjectsAction;
-use App\Events\ProjectCreated;
+use App\Events\ProjectCreatedOrUpdated;
 use App\Events\ProjectDeleted;
 use App\Models\Notification;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -70,7 +70,7 @@ class ProjectController extends Controller
             'is_read' => false
         ]);
 
-        broadcast(new ProjectCreated($project, $notification, Auth::user(),  'created'))
+        broadcast(new ProjectCreatedOrUpdated($project, $notification, Auth::user(),  'created'))
             ->toOthers();
 
         return to_route('projects.index')
@@ -107,7 +107,7 @@ class ProjectController extends Controller
     {
         $this->authorize('update', $project);
         $data = $request->validated();
-        $data['manager_assigned_id'] = $request->manager_assigned_id;
+        $data['manager_assigned_id'] = (int) $request->manager_assigned_id;
         $project->update($data);
 
         $notification = Notification::create([
@@ -117,7 +117,7 @@ class ProjectController extends Controller
             'is_read' => false
         ]);
 
-        broadcast(new ProjectCreated($project, $notification, Auth::user(), 'updated'))->toOthers();
+        broadcast(new ProjectCreatedOrUpdated($project, $notification, Auth::user(), 'updated'))->toOthers();
         return to_route('projects.index')
                 ->with('success', 'Project Updated Successfully!');
     }
@@ -125,9 +125,8 @@ class ProjectController extends Controller
     public function destroy(Project $project)
     {
         $this->authorize('delete', $project);
-        $project->delete();
-
         broadcast(new ProjectDeleted($project->managedBy->id))->toOthers();
+        $project->delete();
 
         return to_route('projects.index')
                 ->with('success', 'Project Deleted Successfully!');

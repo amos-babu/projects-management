@@ -29,12 +29,10 @@ export default function Notifications() {
 
     useEffect(() => {
         setReadUnreadNotifications(notifications);
-        console.log("Set Notifications", notifications);
     }, [notifications]);
 
     useEffect(() => {
         setReadNotificationCount(notificationCount);
-        console.log("Set NotificationsCount", notificationCount);
     }, [notificationCount]);
 
     const unreadNotifications = readUnreadNotifications.filter(

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\TaskStatus;
 use App\Enums\UserRoles;
+use App\Events\TaskCreatedOrUpdated;
 use App\Models\Task;
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
@@ -43,7 +44,10 @@ class TaskController extends Controller
         $data['project_id'] = (int)$request->project_id;
         $data['developer_assigned_id'] = (int)$request->developer_assigned_id;
 
-        Task::create($data);
+        $task = Task::create($data);
+        $task->refresh();
+
+        broadcast(new TaskCreatedOrUpdated($task, 'created'))->toOthers();
 
         return to_route('projects.show', $request->project_id)
                 ->with('success', 'Task Created Successfully!');
