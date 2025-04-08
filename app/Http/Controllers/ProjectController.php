@@ -125,7 +125,15 @@ class ProjectController extends Controller
     public function destroy(Project $project)
     {
         $this->authorize('delete', $project);
-        broadcast(new ProjectDeleted($project->managedBy->id))->toOthers();
+
+        $notification = Notification::create([
+            'user_id' => $project->manager_assigned_id,
+            'project_id' => $project->id,
+            'type' => 'deleted',
+            'is_read' => false
+        ]);
+
+        broadcast(new ProjectDeleted($project->managedBy->id, $notification))->toOthers();
         $project->delete();
 
         return to_route('projects.index')

@@ -83,6 +83,8 @@ class TaskController extends Controller
         $data['developer_assigned_id'] = (int)$request->developer_assigned_id;
         $task->update($data);
 
+        broadcast(new TaskCreatedOrUpdated($task, 'updated'))->toOthers();
+
         return to_route('projects.show', $project)
                 ->with('success', 'Task Updated Successfully!');
 

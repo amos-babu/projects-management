@@ -75,17 +75,18 @@ export const ProjectUpdateProvider = ({
             (event) => {
                 const message =
                     event.actionType === "created"
-                        ? "New Project Added"
-                        : "Project Updated";
+                        ? "New Task Added"
+                        : "Task Updated";
 
                 toast.info(message, {
                     action: {
-                        label: "View Project",
+                        label: "View Task",
                         onClick: () => {
                             router.visit(route("tasks.show", event.id));
                         },
                     },
                 });
+                console.log(event);
             }
         );
 

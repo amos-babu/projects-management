@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+use App\Models\Notification;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -16,12 +17,14 @@ class ProjectDeleted  implements ShouldBroadcastNow
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $managerId;
+    public Notification $notification;
     /**
      * Create a new event instance.
      */
-    public function __construct($managerId)
+    public function __construct($managerId, Notification $notification)
     {
         $this->managerId = $managerId;
+        $this->notification = $notification;
     }
 
     /**
