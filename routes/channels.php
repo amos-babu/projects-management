@@ -15,3 +15,7 @@ Broadcast::channel('project_delete.{userId}', function (User $user, $userId) {
 Broadcast::channel('task.{userId}', function (User $user, $userId) {
     return (int) $user->id === (int) $userId;
 });
+
+Broadcast::channel('task_deleted.{userId}', function (User $user, $userId) {
+    return (int) $user->id === (int) $userId;
+});

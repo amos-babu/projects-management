@@ -95,6 +95,22 @@ export const ProjectUpdateProvider = ({
         };
     }, [auth?.user?.id]);
 
+    useEffect(() => {
+        if (!auth?.user?.id) return;
+
+        window.Echo.private(`task_deleted.${auth.user.id}`).listen(
+            "TaskDeleted",
+            (event) => {
+                const message = "Task Deleted Successfully";
+                toast.success(message);
+            }
+        );
+
+        return () => {
+            window.Echo.leaveChannel(`task_deleted.${auth.user.id}`);
+        };
+    }, [auth?.user?.id]);
+
     return (
         <ProjectUpdateContext.Provider
             value={{ notifications, notificationCount }}

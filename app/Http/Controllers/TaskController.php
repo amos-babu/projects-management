@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Enums\TaskStatus;
 use App\Enums\UserRoles;
 use App\Events\TaskCreatedOrUpdated;
+use App\Events\TaskDeleted;
 use App\Models\Task;
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
@@ -94,6 +95,7 @@ class TaskController extends Controller
     {
         $this->authorize('delete', $task);
         $project = $task->project->id;
+        broadcast(new TaskDeleted($task))->toOthers();
         $task->delete();
 
         return to_route('projects.show', $project)
