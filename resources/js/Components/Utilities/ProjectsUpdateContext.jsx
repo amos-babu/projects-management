@@ -78,6 +78,18 @@ export const ProjectUpdateProvider = ({
                         ? "New Task Added"
                         : "Task Updated";
 
+                setNotifications((prev) => {
+                    if (
+                        prev.some(
+                            (n) =>
+                                Number(n.id) === Number(event.notification.id)
+                        )
+                    ) {
+                        return prev;
+                    }
+                    return [...prev, event.notification];
+                });
+
                 toast.info(message, {
                     action: {
                         label: "View Task",
@@ -103,6 +115,7 @@ export const ProjectUpdateProvider = ({
             (event) => {
                 const message = "Task Deleted Successfully";
                 toast.success(message);
+                console.log(event);
             }
         );
 

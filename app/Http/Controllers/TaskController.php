@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\CreateNotificationAction;
 use App\Enums\TaskStatus;
 use App\Enums\UserRoles;
 use App\Events\TaskCreatedOrUpdated;
@@ -42,15 +43,23 @@ class TaskController extends Controller
         $this->authorize('create', Task::class);
         $data = $request->validated();
         $data['user_id'] = Auth::id();
-        $data['project_id'] = (int)$request->project_id;
-        $data['developer_assigned_id'] = (int)$request->developer_assigned_id;
+        $routeId = (int) $data['project_id'];
 
         $task = Task::create($data);
         $task->refresh();
 
-        broadcast(new TaskCreatedOrUpdated($task, 'created'))->toOthers();
+        $notification = CreateNotificationAction::handle(
+            $task->developer_assigned_id,
+            $task->id,
+            'created',
+            'task');
 
-        return to_route('projects.show', $request->project_id)
+        broadcast(new TaskCreatedOrUpdated(
+            $task,
+            'created',
+            $notification))->toOthers();
+
+        return to_route('projects.show', $routeId)
                 ->with('success', 'Task Created Successfully!');
     }
 
@@ -81,10 +90,18 @@ class TaskController extends Controller
         $this->authorize('update', $task);
         $project = $task->project->id;
         $data = $request->validated();
-        $data['developer_assigned_id'] = (int)$request->developer_assigned_id;
         $task->update($data);
 
-        broadcast(new TaskCreatedOrUpdated($task, 'updated'))->toOthers();
+        $notification = CreateNotificationAction::handle(
+            $task->developer_assigned_id,
+            $task->id,
+            'updated',
+            'task');
+
+        broadcast(new TaskCreatedOrUpdated(
+            $task,
+            'updated',
+            $notification))->toOthers();
 
         return to_route('projects.show', $project)
                 ->with('success', 'Task Updated Successfully!');
@@ -95,7 +112,14 @@ class TaskController extends Controller
     {
         $this->authorize('delete', $task);
         $project = $task->project->id;
-        broadcast(new TaskDeleted($task))->toOthers();
+
+        $notification = CreateNotificationAction::handle(
+            $task->developer_assigned_id,
+            $task->id,
+            'deleted',
+            'task');
+
+        broadcast(new TaskDeleted($task, $notification))->toOthers();
         $task->delete();
 
         return to_route('projects.show', $project)

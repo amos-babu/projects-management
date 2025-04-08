@@ -2,6 +2,8 @@
 
 namespace App\Events;
 
+use App\Http\Resources\NotificationResource;
+use App\Models\Notification;
 use App\Models\Task;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
@@ -18,11 +20,13 @@ class TaskCreatedOrUpdated implements ShouldBroadcastNow
 
     public Task $task;
     public string $actionType;
+    public Notification $notification;
 
-    public function __construct(Task $task, string $actionType)
+    public function __construct(Task $task, string $actionType, Notification $notification)
     {
         $this->task = $task;
         $this->actionType = $actionType;
+        $this->notification = $notification;
     }
 
     /**
@@ -50,7 +54,8 @@ class TaskCreatedOrUpdated implements ShouldBroadcastNow
             ],
             "start_date" =>$this->task->start_date,
             "end_date" =>$this->task->end_date,
-            "actionType" => $this->actionType
+            "actionType" => $this->actionType,
+            "notification" => new NotificationResource($this->notification)
         ];
     }
 }

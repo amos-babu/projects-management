@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\CreateNotificationAction;
 use App\Enums\ProjectsStatus;
 use App\Enums\UserRoles;
 use App\Models\Project;
@@ -58,19 +59,20 @@ class ProjectController extends Controller
         $this->authorize('create', Project::class);
         $data = $request->validated();
         $data['user_id'] = Auth::id();
-        $data['manager_assigned_id'] = (int)$request->manager_assigned_id;
 
         $project = Project::create($data);
         $project->refresh();
 
-        $notification = Notification::create([
-            'user_id' => $project->manager_assigned_id,
-            'project_id' => $project->id,
-            'type' => 'created',
-            'is_read' => false
-        ]);
+        $notification = CreateNotificationAction::handle(
+            $project->manager_assigned_id,
+            $project->id,
+            'created',
+            'project');
 
-        broadcast(new ProjectCreatedOrUpdated($project, $notification, Auth::user(),  'created'))
+        broadcast(new ProjectCreatedOrUpdated(
+            $project, $notification,
+            Auth::user(),
+            'created'))
             ->toOthers();
 
         return to_route('projects.index')
@@ -107,17 +109,20 @@ class ProjectController extends Controller
     {
         $this->authorize('update', $project);
         $data = $request->validated();
-        $data['manager_assigned_id'] = (int) $request->manager_assigned_id;
         $project->update($data);
 
-        $notification = Notification::create([
-            'user_id' => $project->manager_assigned_id,
-            'project_id' => $project->id,
-            'type' => 'updated',
-            'is_read' => false
-        ]);
+        $notification = CreateNotificationAction::handle(
+            $project->manager_assigned_id,
+            $project->id,
+            'updated',
+            'project');
 
-        broadcast(new ProjectCreatedOrUpdated($project, $notification, Auth::user(), 'updated'))->toOthers();
+        broadcast(new ProjectCreatedOrUpdated(
+            $project,
+            $notification,
+            Auth::user(),
+            'updated'))->toOthers();
+
         return to_route('projects.index')
                 ->with('success', 'Project Updated Successfully!');
     }
@@ -126,11 +131,18 @@ class ProjectController extends Controller
     {
         $this->authorize('delete', $project);
 
+        // $notification = CreateNotificationAction::handle(
+        //     $project->manager_assigned_id,
+        //     $project->id,
+        //     'deleted',
+        //     'project');
+
         $notification = Notification::create([
             'user_id' => $project->manager_assigned_id,
             'project_id' => $project->id,
             'type' => 'deleted',
-            'is_read' => false
+            'is_read' => false,
+            'project_type' => 'project'
         ]);
 
         broadcast(new ProjectDeleted($project->managedBy->id, $notification))->toOthers();

@@ -12,16 +12,17 @@ class Notification extends Model
         'user_id',
         'project_id',
         'type',
-        'is_read'
+        'is_read',
+        'project_type'
     ];
 
     public function getMessageAttribute()
     {
         if(!$this->project)
         {
-            return "A project was {$this->type}";
+            return "A ".$this->project_type. "was {$this->type}";
         }
-        return "Project '{$this->project->name}' was {$this->type}.";
+        return ucfirst($this->project_type) ." '{$this->project->name}' was {$this->type}.";
     }
 
     public function scopeForUser($query, $userId)

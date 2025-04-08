@@ -2,6 +2,8 @@
 
 namespace App\Events;
 
+use App\Http\Resources\NotificationResource;
+use App\Models\Notification;
 use App\Models\Task;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
@@ -17,9 +19,12 @@ class TaskDeleted implements ShouldBroadcastNow
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public Task $task;
-    public function __construct(Task $task)
+    public Notification $notification;
+
+    public function __construct(Task $task, Notification $notification)
     {
         $this->task = $task;
+        $this->notification = $notification;
     }
 
     /**
@@ -33,4 +38,21 @@ class TaskDeleted implements ShouldBroadcastNow
             new PrivateChannel('task_deleted.'.$this->task->developer_assigned_id),
         ];
     }
+
+    public function broadcastWith(){
+        return [
+            "id" =>$this->task->id,
+            "title" =>$this->task->title,
+            "description" =>$this->task->description,
+            "developer_assigned_id" =>$this->task->developer_assigned_id,
+            "status" => [
+                "label" => $this->task->status->label(),
+                "value" => $this->task->status->value
+            ],
+            "start_date" =>$this->task->start_date,
+            "end_date" =>$this->task->end_date,
+            "notification" => new NotificationResource($this->notification)
+        ];
+    }
+
 }
