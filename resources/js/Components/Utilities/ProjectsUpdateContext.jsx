@@ -98,7 +98,6 @@ export const ProjectUpdateProvider = ({
                         },
                     },
                 });
-                console.log(event);
             }
         );
 
@@ -113,9 +112,20 @@ export const ProjectUpdateProvider = ({
         window.Echo.private(`task_deleted.${auth.user.id}`).listen(
             "TaskDeleted",
             (event) => {
-                const message = "Task Deleted Successfully";
+                const message = "Task was deleted";
                 toast.success(message);
-                console.log(event);
+
+                setNotifications((prev) => {
+                    if (
+                        prev.some(
+                            (n) =>
+                                Number(n.id) === Number(event.notification.id)
+                        )
+                    ) {
+                        return prev;
+                    }
+                    return [...prev, event.notification];
+                });
             }
         );
 

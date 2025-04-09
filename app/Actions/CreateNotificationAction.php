@@ -1,16 +1,14 @@
 <?php
 
 namespace App\Actions;
-
-use App\Models\Notification;
+use Illuminate\Database\Eloquent\Model;
 
 class CreateNotificationAction
 {
-    public static function handle($managerId, $projectId, $actionType, $projectType)
+    public static function handle($managerId, Model $notifiable, $actionType, $projectType)
     {
-        return Notification::create([
+        return $notifiable->notifications()->create([
             'user_id' => $managerId,
-            'project_id' => $projectId,
             'type' => $actionType,
             'is_read' => false,
             'project_type' => $projectType

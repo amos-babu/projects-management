@@ -41,4 +41,9 @@ class Task extends Model
     {
         return $this->belongsTo(Project::class);
     }
+
+    public function notifications()
+    {
+        return $this->morphMany(Notification::class, 'notifiable');
+    }
 }

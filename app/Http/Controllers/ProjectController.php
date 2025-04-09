@@ -65,7 +65,7 @@ class ProjectController extends Controller
 
         $notification = CreateNotificationAction::handle(
             $project->manager_assigned_id,
-            $project->id,
+            $project,
             'created',
             'project');
 
@@ -113,7 +113,7 @@ class ProjectController extends Controller
 
         $notification = CreateNotificationAction::handle(
             $project->manager_assigned_id,
-            $project->id,
+            $project,
             'updated',
             'project');
 
@@ -131,19 +131,11 @@ class ProjectController extends Controller
     {
         $this->authorize('delete', $project);
 
-        // $notification = CreateNotificationAction::handle(
-        //     $project->manager_assigned_id,
-        //     $project->id,
-        //     'deleted',
-        //     'project');
-
-        $notification = Notification::create([
-            'user_id' => $project->manager_assigned_id,
-            'project_id' => $project->id,
-            'type' => 'deleted',
-            'is_read' => false,
-            'project_type' => 'project'
-        ]);
+        $notification = CreateNotificationAction::handle(
+            $project->manager_assigned_id,
+            $project,
+            'deleted',
+            'project');
 
         broadcast(new ProjectDeleted($project->managedBy->id, $notification))->toOthers();
         $project->delete();

@@ -41,8 +41,8 @@ class Project extends Model
         return $this->hasMany(Task::class);
     }
 
-    public function notifications(): HasMany
+    public function notifications()
     {
-        return $this->hasMany(Notification::class);
+        return $this->morphMany(Notification::class, 'notifiable');
     }
 }

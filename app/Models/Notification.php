@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Container\Attributes\Auth;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class Notification extends Model
 {
@@ -18,11 +19,19 @@ class Notification extends Model
 
     public function getMessageAttribute()
     {
-        if(!$this->project)
+        $notifiable = $this->notifiable;
+
+        if(!$notifiable)
         {
-            return "A ".$this->project_type. "was {$this->type}";
+            return "A " . $this->project_type . " was {$this->type}";
         }
-        return ucfirst($this->project_type) ." '{$this->project->name}' was {$this->type}.";
+
+        $type = strtolower(class_basename($notifiable));
+        $label = method_exists($notifiable, 'getNotificationLabel')
+            ? $notifiable->getNotificationLabel()
+            : ($notifiable->name ?? $notifiable->title ?? 'Unknown');
+
+        return ucfirst($type) ." '{$label}' was {$this->type}.";
     }
 
     public function scopeForUser($query, $userId)
@@ -35,8 +44,8 @@ class Notification extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function project(): BelongsTo
+    public function notifiable(): MorphTo
     {
-        return $this->belongsTo(Project::class);
+        return $this->morphTo();
     }
 }

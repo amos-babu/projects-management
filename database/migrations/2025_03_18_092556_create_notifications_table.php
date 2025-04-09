@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('notifications', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
-            $table->foreignId('project_id')->constrained('projects')->cascadeOnDelete();
+            $table->morphs('notifiable');  //polymorphic relation
             $table->string('project_type');
             $table->string('type');
             $table->boolean('is_read')->default(false);

@@ -50,7 +50,7 @@ class TaskController extends Controller
 
         $notification = CreateNotificationAction::handle(
             $task->developer_assigned_id,
-            $task->id,
+            $task,
             'created',
             'task');
 
@@ -94,7 +94,7 @@ class TaskController extends Controller
 
         $notification = CreateNotificationAction::handle(
             $task->developer_assigned_id,
-            $task->id,
+            $task,
             'updated',
             'task');
 
@@ -115,7 +115,7 @@ class TaskController extends Controller
 
         $notification = CreateNotificationAction::handle(
             $task->developer_assigned_id,
-            $task->id,
+            $task,
             'deleted',
             'task');
 
