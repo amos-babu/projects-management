@@ -8,9 +8,13 @@ const ProjectUpdateContext = createContext();
 export const ProjectUpdateProvider = ({
     children,
     auth,
+    initialProjects = [],
+    initialTasks = [],
     notifications: initialNotifications,
     notificationCount,
 }) => {
+    const [realtimeProjects, setRealtimeProjects] = useState(initialProjects);
+    const [realtimeTasks, setRealtimeTasks] = useState(initialTasks);
     const [notifications, setNotifications] = useState(
         initialNotifications || []
     );
@@ -24,22 +28,26 @@ export const ProjectUpdateProvider = ({
                     event.actionType === "created"
                         ? "New Project Added"
                         : "Project Updated";
-                setNotifications((prev) => {
-                    if (
-                        prev.some(
-                            (n) =>
-                                Number(n.id) === Number(event.notification.id)
-                        )
-                    ) {
-                        return prev;
+                setRealtimeProjects((prev) => {
+                    const exists = prev.find((p) => p.id === event.project.id);
+                    if (exists) {
+                        return prev.map((p) =>
+                            p.id === event.project.id ? project : p
+                        );
+                    } else {
+                        return [...prev, event.project];
                     }
-                    return [...prev, event.notification];
                 });
+
+                setNotifications((prev) => [event.notification, ...prev]);
+
                 toast.info(message, {
                     action: {
                         label: "View Project",
                         onClick: () => {
-                            router.visit(route("projects.show", event.id));
+                            router.visit(
+                                route("projects.show", event.project.id)
+                            );
                         },
                     },
                 });
@@ -57,8 +65,20 @@ export const ProjectUpdateProvider = ({
         window.Echo.private(`project_delete.${auth.user.id}`).listen(
             "ProjectDeleted",
             (event) => {
-                const message = "Project Deleted Successfully";
+                const message = "A project was deleted";
                 toast.success(message);
+
+                setNotifications((prev) => {
+                    if (
+                        prev.some(
+                            (n) =>
+                                Number(n.id) === Number(event.notification.id)
+                        )
+                    ) {
+                        return prev;
+                    }
+                    return [...prev, event.notification];
+                });
             }
         );
 
@@ -78,23 +98,24 @@ export const ProjectUpdateProvider = ({
                         ? "New Task Added"
                         : "Task Updated";
 
-                setNotifications((prev) => {
-                    if (
-                        prev.some(
-                            (n) =>
-                                Number(n.id) === Number(event.notification.id)
-                        )
-                    ) {
-                        return prev;
+                setRealtimeTasks((prev) => {
+                    const exists = prev.find((p) => p.id === event.task.id);
+                    if (exists) {
+                        return prev.map((p) =>
+                            p.id === event.task.id ? task : p
+                        );
+                    } else {
+                        return [...prev, event.task];
                     }
-                    return [...prev, event.notification];
                 });
+
+                setNotifications((prev) => [event.notification, ...prev]);
 
                 toast.info(message, {
                     action: {
                         label: "View Task",
                         onClick: () => {
-                            router.visit(route("tasks.show", event.id));
+                            router.visit(route("tasks.show", event.task.id));
                         },
                     },
                 });
@@ -112,7 +133,7 @@ export const ProjectUpdateProvider = ({
         window.Echo.private(`task_deleted.${auth.user.id}`).listen(
             "TaskDeleted",
             (event) => {
-                const message = "Task was deleted";
+                const message = "A task was deleted";
                 toast.success(message);
 
                 setNotifications((prev) => {
@@ -126,6 +147,8 @@ export const ProjectUpdateProvider = ({
                     }
                     return [...prev, event.notification];
                 });
+
+                console.log(event);
             }
         );
 
@@ -136,7 +159,12 @@ export const ProjectUpdateProvider = ({
 
     return (
         <ProjectUpdateContext.Provider
-            value={{ notifications, notificationCount }}
+            value={{
+                notifications,
+                notificationCount,
+                realtimeProjects,
+                realtimeTasks,
+            }}
         >
             {children}
         </ProjectUpdateContext.Provider>

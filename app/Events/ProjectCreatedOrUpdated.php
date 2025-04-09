@@ -3,6 +3,7 @@
 namespace App\Events;
 
 use App\Http\Resources\NotificationResource;
+use App\Http\Resources\ProjectResource;
 use App\Http\Resources\TaskResource;
 use App\Http\Resources\UserResource;
 use App\Models\Notification;
@@ -44,22 +45,8 @@ class ProjectCreatedOrUpdated implements ShouldBroadcastNow
     public function broadcastWith()
     {
         return [
-           "id" => $this->project->id,
-            "name" => $this->project->name,
-            "description" => $this->project->description,
-            "status" => [
-                'label' => $this->project->status->label(),
-                'value' => $this->project->status->value
-                ],
-            "permissions" => [
-                "canUpdate" => $this->user?->can('update', $this->project->resource),
-                "canDelete" => $this->user?->can('delete', $this->project->resource)
-            ],
-            "start_date" => $this->project->start_date,
-            "end_date" => $this->project->end_date,
-            "managed_by" =>new UserResource($this->project->managedBy),
-            "created_by" => new UserResource($this->project->createdBy),
-            "tasks" => TaskResource::collection($this->project->tasks),
+            "project" => new ProjectResource($this->project),
+
             "actionType" => $this->actionType,
             "notification" => new NotificationResource($this->notification)
         ];

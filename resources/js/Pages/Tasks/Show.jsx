@@ -26,11 +26,11 @@ export default function Show({ task }) {
                                 <div className="mb-4 text-xl font-bold">
                                     <Badge
                                         className={`${
-                                            task.status.label === "In Progress"
-                                                ? "bg-yellow-500"
-                                                : task.status.label ===
-                                                  "Pending"
+                                            task.status.label === "To do"
                                                 ? "bg-red-500"
+                                                : task.status.label ===
+                                                  "In Progress"
+                                                ? "bg-yellow-500"
                                                 : task.status.label ===
                                                   "Completed"
                                                 ? "bg-green-500"

@@ -3,6 +3,7 @@
 namespace App\Events;
 
 use App\Http\Resources\NotificationResource;
+use App\Http\Resources\TaskResource;
 use App\Models\Notification;
 use App\Models\Task;
 use Illuminate\Broadcasting\Channel;
@@ -44,16 +45,7 @@ class TaskCreatedOrUpdated implements ShouldBroadcastNow
 
     public function broadcastWith(){
         return [
-            "id" =>$this->task->id,
-            "title" =>$this->task->title,
-            "description" =>$this->task->description,
-            "developer_assigned_id" =>$this->task->developer_assigned_id,
-            "status" => [
-                "label" => $this->task->status->label(),
-                "value" => $this->task->status->value
-            ],
-            "start_date" =>$this->task->start_date,
-            "end_date" =>$this->task->end_date,
+            "task" => new TaskResource($this->task),
             "actionType" => $this->actionType,
             "notification" => new NotificationResource($this->notification)
         ];

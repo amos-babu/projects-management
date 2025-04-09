@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
     Table,
     TableBody,
@@ -9,8 +9,29 @@ import {
 } from "@/Components/ui/table";
 import { Link } from "@inertiajs/react";
 import { Badge } from "@/Components/ui/badge";
+import { useProjectUpdate } from "@/Components/Utilities/ProjectsUpdateContext";
 
 export default function Index({ tasks }) {
+    const { realtimeTasks } = useProjectUpdate();
+    const [updatedTasks, setUpdatedTasks] = useState(tasks);
+
+    useEffect(() => {
+        if (realtimeTasks.length == 0) return;
+        setUpdatedTasks((prev) => {
+            const updated = [...prev];
+
+            realtimeTasks.forEach((newProj) => {
+                const index = updated.findIndex((p) => p.id === newProj.id);
+                if (index !== -1) {
+                    updated[index] == newProj;
+                } else {
+                    updated.unshift(newProj);
+                }
+            });
+            return updated;
+        });
+    }, [realtimeTasks]);
+
     return (
         <Table className="mt-20">
             <TableHeader>
@@ -24,7 +45,7 @@ export default function Index({ tasks }) {
                 </TableRow>
             </TableHeader>
             <TableBody>
-                {tasks.map((task) => (
+                {updatedTasks.map((task) => (
                     <TableRow key={task.id}>
                         <TableCell>{task.id}</TableCell>
                         <TableCell>

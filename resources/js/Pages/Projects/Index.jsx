@@ -17,14 +17,34 @@ import {
     TableHeader,
     TableRow,
 } from "@/Components/ui/table";
+import { useProjectUpdate } from "@/Components/Utilities/ProjectsUpdateContext";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link, usePage } from "@inertiajs/react";
 import { useEffect, useState } from "react";
 import { toast, Toaster } from "sonner";
 
-export default function Index({ projects, canCreatePolicy, authUserId }) {
+export default function Index({ projects, canCreatePolicy }) {
+    const { realtimeProjects } = useProjectUpdate();
     const { flash } = usePage().props;
     const [successMessage, setSuccessMessage] = useState(flash.success);
+    const [updatedProjects, setUpdatedProjects] = useState(projects.data);
+
+    useEffect(() => {
+        if (realtimeProjects.length == 0) return;
+        setUpdatedProjects((prev) => {
+            const updated = [...prev];
+
+            realtimeProjects.forEach((newProj) => {
+                const index = updated.findIndex((p) => p.id === newProj.id);
+                if (index !== -1) {
+                    updated[index] == newProj;
+                } else {
+                    updated.unshift(newProj);
+                }
+            });
+            return updated;
+        });
+    }, [realtimeProjects]);
 
     if (successMessage) {
         setSuccessMessage(null);
@@ -82,7 +102,7 @@ export default function Index({ projects, canCreatePolicy, authUserId }) {
                                                 </TableRow>
                                             </TableHeader>
                                             <TableBody>
-                                                {projects.data.map(
+                                                {updatedProjects.map(
                                                     (project) => (
                                                         <TableRow
                                                             key={project.id}
